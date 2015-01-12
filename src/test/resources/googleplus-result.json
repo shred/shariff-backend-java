@@ -1,0 +1,15 @@
+{
+ "id": "p",
+ "result": {
+  "kind": "pos#plusones",
+  "id": "http://www.heise.de/",
+  "isSetByViewer": false,
+  "metadata": {
+   "type": "URL",
+   "globalCounts": {
+    "count": 273558.0
+   }
+  },
+  "abtk": "AEIZW7T3zC3xzeK6FN6li4oO0fv7krkXxxPGbjzAKsS1wEpbi6Paw87ARLvoaj2gU0yfSOTNUfSzRxUpxEIb3EkP7+BJsG1Rw=="
+ }
+}
