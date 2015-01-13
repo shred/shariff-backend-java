@@ -29,7 +29,6 @@ public abstract class JSONTarget<T> implements Target {
 
     private static final int HTTP_TIMEOUT_MS = 10000;
 
-    @SuppressWarnings("unchecked")
     @Override
     public int count(String url) throws IOException {
         HttpURLConnection connection = connect(url);
@@ -40,8 +39,7 @@ public abstract class JSONTarget<T> implements Target {
 
         try {
             try (InputStream in = connection.getInputStream()) {
-                // This is ugly, but there is no supertype for JSONObject and JSONArray
-                return extractCount((T) new JSONTokener(in).nextValue());
+                return extractCount(read(in));
             } catch (JSONException ex) {
                 throw new IllegalArgumentException(ex);
             }
@@ -90,6 +88,19 @@ public abstract class JSONTarget<T> implements Target {
         connection.setConnectTimeout(HTTP_TIMEOUT_MS);
         connection.setReadTimeout(HTTP_TIMEOUT_MS);
         return connection;
+    }
+
+    /**
+     * Reads data from input stream and provides a result object.
+     *
+     * @param in
+     *            {@link InputStream} to read from
+     * @return Read object
+     */
+    @SuppressWarnings("unchecked")
+    protected T read(InputStream in) throws IOException {
+        // This is ugly, but there is no supertype for JSONObject and JSONArray
+        return (T) new JSONTokener(in).nextValue();
     }
 
 }
