@@ -26,6 +26,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
 
 import org.shredzone.shariff.target.Facebook;
 import org.shredzone.shariff.target.GooglePlus;
@@ -46,8 +47,19 @@ public class ShariffBackend {
      * Creates a new backend instance.
      */
     public ShariffBackend() {
+        final ThreadGroup group = new ThreadGroup("shariff");
+
+        ThreadFactory factory = new ThreadFactory() {
+            @Override
+            public Thread newThread(Runnable r) {
+                Thread t = new Thread(group, r);
+                t.setDaemon(true);
+                return t;
+            }
+        };
+
         targets = Collections.unmodifiableList(createTargets());
-        executor =  Executors.newFixedThreadPool(targets.size());
+        executor = Executors.newFixedThreadPool(targets.size(), factory);
     }
 
     /**
