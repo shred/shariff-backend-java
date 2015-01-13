@@ -28,6 +28,7 @@ import org.shredzone.shariff.target.GooglePlus;
 import org.shredzone.shariff.target.LinkedIn;
 import org.shredzone.shariff.target.Pinterest;
 import org.shredzone.shariff.target.Reddit;
+import org.shredzone.shariff.target.StumbleUpon;
 import org.shredzone.shariff.target.Target;
 import org.shredzone.shariff.target.Twitter;
 
@@ -52,6 +53,7 @@ public class BackendTest {
                 instanceOf(LinkedIn.class),
                 instanceOf(Pinterest.class),
                 instanceOf(Reddit.class),
+                instanceOf(StumbleUpon.class),
                 instanceOf(Twitter.class)
         ));
     }
