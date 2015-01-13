@@ -33,6 +33,7 @@ import org.shredzone.shariff.target.Flattr;
 import org.shredzone.shariff.target.GooglePlus;
 import org.shredzone.shariff.target.LinkedIn;
 import org.shredzone.shariff.target.Pinterest;
+import org.shredzone.shariff.target.Reddit;
 import org.shredzone.shariff.target.Target;
 import org.shredzone.shariff.target.Twitter;
 
@@ -96,6 +97,7 @@ public class ShariffBackend {
                 new GooglePlus(),
                 new LinkedIn(),
                 new Pinterest(),
+                new Reddit(),
                 new Twitter()
         );
     }
