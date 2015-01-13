@@ -72,6 +72,8 @@ You can extend the `ShariffServlet` class and override its protected methods if 
 
 To replace the caching mechanism (e.g. by EHCache), override the `getCountsCached()` method.
 
+For reading and normalizing the url parameter, override the `getUrl()` method.
+
 For an individual test whether the given url contains a valid host or not, override the `isValidHost()` method.
 
 

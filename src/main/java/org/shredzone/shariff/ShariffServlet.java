@@ -126,6 +126,20 @@ public class ShariffServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Reads the URL from the {@link HttpServletRequest}. The default implementation reads
+     * the "url" HTTP parameter.
+     * <p>
+     * Override for individual parameters or URL normalization.
+     *
+     * @param req
+     *            {@link HttpServletRequest} to read the URL from
+     * @return URL, or {@code null} if there was none passed in
+     */
+    protected String getUrl(HttpServletRequest req) {
+        return req.getParameter("url");
+    }
+
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -157,7 +171,7 @@ public class ShariffServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
     throws ServletException, IOException {
-        String url = req.getParameter("url");
+        String url = getUrl(req);
 
         if (url == null) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing url parameter");
