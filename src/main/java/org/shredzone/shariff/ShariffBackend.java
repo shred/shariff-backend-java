@@ -138,4 +138,29 @@ public class ShariffBackend {
         return result;
     }
 
+    /**
+     * A small tool that shows the counters for the given URL.
+     */
+    public static void main(String... args) {
+        if (args.length < 1) {
+            System.err.println("Usage: ShariffBackend <url> ...");
+            return;
+        }
+
+
+        for (String url : args) {
+            System.out.println(url);
+            try {
+                ShariffBackend backend = new ShariffBackend();
+                Map<String, Integer> result = backend.getCounts(url);
+                for (Map.Entry<String, Integer> entry : result.entrySet()) {
+                    System.out.println(String.format("  %-12s: %d", entry.getKey(), entry.getValue()));
+                }
+            } catch (IOException ex) {
+                System.err.println("  Failed: " + ex.getMessage());
+            }
+            System.out.println();
+        }
+    }
+
 }
