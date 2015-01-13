@@ -27,6 +27,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.shredzone.shariff.target.Facebook;
 import org.shredzone.shariff.target.Flattr;
@@ -121,7 +123,7 @@ public class ShariffBackend {
      * @throws IOException
      *             if at least one of the counters could not be retrieved
      */
-    public Map<String, Integer> getCounts(final String url) throws IOException {
+    public Map<String, Integer> getCounts(final String url) {
         List<Future<Integer>> futures = new ArrayList<>(getTargets().size());
 
         for (final Target target : getTargets()) {
@@ -134,15 +136,16 @@ public class ShariffBackend {
         }
 
         Map<String, Integer> result = new HashMap<>();
-        try {
-            for (int ix = 0; ix < futures.size(); ix++) {
-                result.put(getTargets().get(ix).getName(), futures.get(ix).get());
+        for (int ix = 0; ix < futures.size(); ix++) {
+            Target target = getTargets().get(ix);
+            try {
+                result.put(target.getName(), futures.get(ix).get());
+            } catch (Exception ex) {
+                Logger.getLogger(ShariffBackend.class.getName()).log(
+                        Level.WARNING,
+                        target.getName() + " @ " + url,
+                        (ex instanceof ExecutionException ? ((ExecutionException) ex).getCause() : ex));
             }
-        } catch (ExecutionException | InterruptedException ex) {
-            if (ex.getCause() != null && ex.getCause() instanceof IOException) {
-                throw (IOException) ex.getCause();
-            }
-            throw new IOException(ex);
         }
 
         return result;
@@ -160,15 +163,13 @@ public class ShariffBackend {
 
         for (String url : args) {
             System.out.println(url);
-            try {
-                ShariffBackend backend = new ShariffBackend();
-                Map<String, Integer> result = backend.getCounts(url);
-                for (Map.Entry<String, Integer> entry : result.entrySet()) {
-                    System.out.println(String.format("  %-12s: %d", entry.getKey(), entry.getValue()));
-                }
-            } catch (IOException ex) {
-                System.err.println("  Failed: " + ex.getMessage());
+
+            ShariffBackend backend = new ShariffBackend();
+            Map<String, Integer> result = backend.getCounts(url);
+            for (Map.Entry<String, Integer> entry : result.entrySet()) {
+                System.out.println(String.format("  %-12s: %d", entry.getKey(), entry.getValue()));
             }
+
             System.out.println();
         }
     }

@@ -50,13 +50,9 @@ public class ShariffServletTest {
                 counts.put("twitter", 456);
                 counts.put("googleplus", 789);
 
-                try {
-                    ShariffBackend backend = mock(ShariffBackend.class);
-                    when(backend.getCounts("http://example.com/testpage")).thenReturn(counts);
-                    return backend;
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
+                ShariffBackend backend = mock(ShariffBackend.class);
+                when(backend.getCounts("http://example.com/testpage")).thenReturn(counts);
+                return backend;
             }
         };
     }
