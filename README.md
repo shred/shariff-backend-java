@@ -52,7 +52,7 @@ The following configuration options are available:
 | `host `     | Regular expression of acceptable hosts (e.g. "^(.*\\.)?example\\.com$"). If unset, only the host of the servlet is accepted.|
 | `cacheSize` | Maximum number of urls to be cached in memory. Default is 1000. |
 | `cacheTimeToLiveMs` | Maximum time urls are cached, in ms. Default is 1 minute. |
-| `targets`   | List of services to be enabled. Available: `facebook`, `googleplus`, `twitter`. Case sensitive. Services must be separated by comma. Default is all available services. |
+| `targets`   | List of services to be enabled. Available: `facebook`, `flattr`, `googleplus`, `twitter`. Case sensitive. Services must be separated by comma. Default is all available services. |
 
 
 Testing your installation

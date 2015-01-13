@@ -29,6 +29,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 
 import org.shredzone.shariff.target.Facebook;
+import org.shredzone.shariff.target.Flattr;
 import org.shredzone.shariff.target.GooglePlus;
 import org.shredzone.shariff.target.Target;
 import org.shredzone.shariff.target.Twitter;
@@ -89,6 +90,7 @@ public class ShariffBackend {
     protected List<Target> createTargets() {
         return Arrays.<Target>asList(
                 new Facebook(),
+                new Flattr(),
                 new GooglePlus(),
                 new Twitter()
         );
