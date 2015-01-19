@@ -104,7 +104,7 @@ public class ShariffServlet extends HttpServlet {
      * @param url
      *            URL to check
      * @param req
-     *            {@link HttpServletResquest} of the request
+     *            {@link HttpServletRequest} of the request
      * @return {@code true} if this is a valid host
      */
     protected boolean isValidHost(String url, HttpServletRequest req) {

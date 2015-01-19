@@ -12,7 +12,6 @@
  */
 package org.shredzone.shariff;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -141,8 +140,6 @@ public class ShariffBackend {
      * @param url
      *            URL to get the counters for
      * @return Map containing the target name as key, and the counter as value
-     * @throws IOException
-     *             if at least one of the counters could not be retrieved
      */
     public Map<String, Integer> getCounts(final String url) {
         List<Future<Integer>> futures = new ArrayList<>(getTargets().size());
