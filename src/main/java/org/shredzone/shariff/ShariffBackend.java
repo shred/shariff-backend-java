@@ -54,6 +54,44 @@ public class ShariffBackend {
      * Creates a new backend instance.
      */
     public ShariffBackend() {
+        this(null, null);
+    }
+
+    /**
+     * Creates a new backend instance, only providing the given targets.
+     *
+     * @param names
+     *            Target names, as returned by {@link Target#getName()}. Unknown names
+     *            will be silently ignored.
+     */
+    public ShariffBackend(Collection<String> names) {
+        this(names, null);
+    }
+
+    /**
+     * Creates a new backend instance, only providing the given targets. The maximum
+     * number of threads can be set as well, also limiting the number of simultaneous HTTP
+     * connections.
+     *
+     * @param names
+     *            Target names, as returned by {@link Target#getName()}. Unknown names
+     *            will be silently ignored. {@code null} means all targets.
+     * @param maxThreads
+     *            Maximum number of threads. {@code null} means as many threads as there
+     *            are targets.
+     */
+    public ShariffBackend(Collection<String> names, Integer maxThreads) {
+        List<Target> list = new ArrayList<>(createTargets());
+
+        if (names != null) {
+            Iterator<Target> it = list.iterator();
+            while (it.hasNext()) {
+                if (!names.contains(it.next().getName())) {
+                    it.remove();
+                }
+            }
+        }
+
         final ThreadGroup group = new ThreadGroup("shariff");
 
         ThreadFactory factory = new ThreadFactory() {
@@ -65,29 +103,10 @@ public class ShariffBackend {
             }
         };
 
-        targets = Collections.unmodifiableList(createTargets());
-        executor = Executors.newFixedThreadPool(targets.size(), factory);
-    }
-
-    /**
-     * Creates a new backend instance, only providing the given targets.
-     *
-     * @param names
-     *            Target names, as returned by {@link Target#getName()}. Unknown names
-     *            will be silently ignored.
-     */
-    public ShariffBackend(Collection<String> names) {
-        List<Target> list = new ArrayList<>(createTargets());
-
-        Iterator<Target> it = list.iterator();
-        while (it.hasNext()) {
-            if (!names.contains(it.next().getName())) {
-                it.remove();
-            }
-        }
-
         targets = Collections.unmodifiableList(list);
-        executor =  Executors.newFixedThreadPool(targets.size());
+        executor =  Executors.newFixedThreadPool(
+                        (maxThreads != null ? maxThreads : targets.size()),
+                        factory);
     }
 
     /**

@@ -53,6 +53,7 @@ The following configuration options are available:
 | `cacheSize` | Maximum number of urls to be cached in memory. Default is 1000. |
 | `cacheTimeToLiveMs` | Maximum time urls are cached, in ms. Default is 1 minute. |
 | `targets`   | List of services to be enabled. Available: `facebook`, `flattr`, `googleplus`, `linkedin`, `pinterest`, `reddit`, `stumbleupon`, `twitter`. Case sensitive. Services must be separated by comma. Default is all available services. |
+| `threads`   | Number of fetcher threads. Defaults to number of active targets. |
 
 
 Testing your installation

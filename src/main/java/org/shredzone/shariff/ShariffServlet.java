@@ -43,6 +43,7 @@ public class ShariffServlet extends HttpServlet {
     private int cacheSize = 1000;
     private long timeToLiveMs = 60000L;
     private String[] targets = null;
+    private Integer threads = null;
 
     /**
      * Generates a {@link ShariffBackend}.
@@ -50,11 +51,7 @@ public class ShariffServlet extends HttpServlet {
      * Override for creating custom configured {@link ShariffBackend} instances.
      */
     protected ShariffBackend createBackend() {
-        if (targets != null) {
-            return new ShariffBackend(Arrays.asList(targets));
-        } else {
-            return new ShariffBackend();
-        }
+        return new ShariffBackend((targets != null ? Arrays.asList(targets) : null), threads);
     }
 
     /**
@@ -165,6 +162,11 @@ public class ShariffServlet extends HttpServlet {
             for (int ix = 0; ix < targets.length; ix++) {
                 targets[ix] = targets[ix].trim();
             }
+        }
+
+        String thr = config.getInitParameter("threads");
+        if (thr != null) {
+            threads = Integer.parseInt(thr);
         }
     }
 
