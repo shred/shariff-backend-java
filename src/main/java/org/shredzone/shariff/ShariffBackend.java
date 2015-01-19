@@ -39,6 +39,7 @@ import org.shredzone.shariff.target.Reddit;
 import org.shredzone.shariff.target.StumbleUpon;
 import org.shredzone.shariff.target.Target;
 import org.shredzone.shariff.target.Twitter;
+import org.shredzone.shariff.target.Xing;
 
 /**
  * A backend service for performing Shariff requests.
@@ -121,7 +122,8 @@ public class ShariffBackend {
                 new Pinterest(),
                 new Reddit(),
                 new StumbleUpon(),
-                new Twitter()
+                new Twitter(),
+                new Xing()
         );
     }
 

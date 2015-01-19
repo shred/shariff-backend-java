@@ -31,6 +31,7 @@ import org.shredzone.shariff.target.Reddit;
 import org.shredzone.shariff.target.StumbleUpon;
 import org.shredzone.shariff.target.Target;
 import org.shredzone.shariff.target.Twitter;
+import org.shredzone.shariff.target.Xing;
 
 /**
  * Unit tests for {@link BackendTest}.
@@ -54,7 +55,8 @@ public class BackendTest {
                 instanceOf(Pinterest.class),
                 instanceOf(Reddit.class),
                 instanceOf(StumbleUpon.class),
-                instanceOf(Twitter.class)
+                instanceOf(Twitter.class),
+                instanceOf(Xing.class)
         ));
     }
 
