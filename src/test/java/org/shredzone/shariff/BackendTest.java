@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
+import org.shredzone.shariff.target.AddThis;
 import org.shredzone.shariff.target.Facebook;
 import org.shredzone.shariff.target.Flattr;
 import org.shredzone.shariff.target.GooglePlus;
@@ -47,6 +48,7 @@ public class BackendTest {
         ShariffBackend backend = new ShariffBackend();
         Collection<Target> targets = backend.getTargets();
         assertThat(targets, contains(
+                instanceOf(AddThis.class),
                 instanceOf(Facebook.class),
                 instanceOf(Flattr.class),
                 instanceOf(GooglePlus.class),

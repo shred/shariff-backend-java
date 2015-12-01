@@ -29,6 +29,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.shredzone.shariff.target.AddThis;
 import org.shredzone.shariff.target.Facebook;
 import org.shredzone.shariff.target.Flattr;
 import org.shredzone.shariff.target.GooglePlus;
@@ -113,6 +114,7 @@ public class ShariffBackend {
      */
     protected List<Target> createTargets() {
         return Arrays.<Target>asList(
+                new AddThis(),
                 new Facebook(),
                 new Flattr(),
                 new GooglePlus(),
