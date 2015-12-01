@@ -30,7 +30,6 @@ import org.shredzone.shariff.target.Pinterest;
 import org.shredzone.shariff.target.Reddit;
 import org.shredzone.shariff.target.StumbleUpon;
 import org.shredzone.shariff.target.Target;
-import org.shredzone.shariff.target.Twitter;
 import org.shredzone.shariff.target.Xing;
 
 /**
@@ -55,7 +54,6 @@ public class BackendTest {
                 instanceOf(Pinterest.class),
                 instanceOf(Reddit.class),
                 instanceOf(StumbleUpon.class),
-                instanceOf(Twitter.class),
                 instanceOf(Xing.class)
         ));
     }
@@ -63,11 +61,11 @@ public class BackendTest {
     @SuppressWarnings("unchecked")
     @Test
     public void getTargetByConstructorTest() {
-        ShariffBackend backend = new ShariffBackend(Arrays.asList("facebook", "twitter"));
+        ShariffBackend backend = new ShariffBackend(Arrays.asList("facebook", "flattr"));
         Collection<Target> targets = backend.getTargets();
         assertThat(targets, contains(
                 instanceOf(Facebook.class),
-                instanceOf(Twitter.class)
+                instanceOf(Flattr.class)
         ));
     }
 
@@ -79,7 +77,7 @@ public class BackendTest {
                 return Arrays.<Target>asList(
                         new TestTarget("facebook", 10),
                         new TestTarget("googleplus", 20),
-                        new TestTarget("twitter", 30)
+                        new TestTarget("flattr", 30)
                 );
             }
         };
@@ -89,7 +87,7 @@ public class BackendTest {
         assertThat(counts.size(), is(3));
         assertThat(counts.get("facebook"), is(10));
         assertThat(counts.get("googleplus"), is(20));
-        assertThat(counts.get("twitter"), is(30));
+        assertThat(counts.get("flattr"), is(30));
     }
 
     /**

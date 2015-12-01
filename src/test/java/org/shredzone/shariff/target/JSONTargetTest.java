@@ -33,7 +33,7 @@ public class JSONTargetTest {
 
     @Test(expected = IOException.class)
     public void badResponseTest() throws IOException {
-        Twitter target = new Twitter() {
+        Flattr target = new Flattr() {
             @Override
             protected HttpURLConnection openConnection(URL url) throws IOException {
                 HttpURLConnection connection = mock(HttpURLConnection.class);
