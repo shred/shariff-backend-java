@@ -47,7 +47,7 @@ public class ShariffServletTest {
             protected ShariffBackend createBackend() {
                 Map<String, Integer> counts = new TreeMap<>();
                 counts.put("facebook", 123);
-                counts.put("twitter", 456);
+                counts.put("flattr", 456);
                 counts.put("googleplus", 789);
 
                 ShariffBackend backend = mock(ShariffBackend.class);
@@ -111,7 +111,7 @@ public class ShariffServletTest {
         verify(resp).setContentType("Content-type: application/json");
         verify(resp).setCharacterEncoding("utf-8");
 
-        assertThat(out.toString(), is("{\"twitter\":456,\"facebook\":123,\"googleplus\":789}"));
+        assertThat(out.toString(), is("{\"facebook\":123,\"flattr\":456,\"googleplus\":789}"));
     }
 
 }
