@@ -19,7 +19,7 @@ Features
 --------
 
 * Easy to use Java servlet
-* Supports `facebook`, `flattr`, `googleplus`, `linkedin`, `pinterest`, `reddit`, `stumbleupon`, `twitter`, `xing`
+* Supports `addthis`, `facebook`, `flattr`, `googleplus`, `linkedin`, `pinterest`, `reddit`, `stumbleupon`, `xing`
 * Parallel counter fetching to minimize response time
 * Comes with a simple caching mechanism that can be replaced by other cache solutions like [Ehcache](http://ehcache.org)
 * Built with maven, package is available at Maven Central
@@ -28,7 +28,7 @@ Features
 Installing the Shariff backend on your own server
 -------------------------------------------------
 
-Just add Shariff (`org.shredzone.shariff:backend:1.0`) to your maven or gradle dependencies, or copy the `shariff.jar` and [`json.jar`](http://www.json.org/java/index.html) to your project's lib folder. Then add the Shariff servlet to your `web.xml`:
+Just add Shariff (`org.shredzone.shariff:backend:1.1`) to your maven or gradle dependencies, or copy the `shariff.jar` and [`json.jar`](http://www.json.org/java/index.html) to your project's lib folder. Then add the Shariff servlet to your `web.xml`:
 
 ```xml
 <servlet>
@@ -49,7 +49,7 @@ Use `init-param` to configure the servlet:
     <servlet-class>org.shredzone.shariff.ShariffServlet</servlet-class>
     <init-param>
         <param-name>targets</param-name>
-        <param-value>googleplus,twitter</param-value>
+        <param-value>googleplus,facebook</param-value>
     </init-param>
 </servlet>
 ```
@@ -71,7 +71,7 @@ Testing your installation
 If the backend runs under `http://example.com/shariff/`, calling the URL `http://example.com/shariff/?url=http%3A%2F%2Fwww.example.com` should return a JSON structure with numbers in it, e.g.:
 
 ```json
-{"facebook":1452,"twitter":404,"googleplus":23}
+{"facebook":1452,"googleplus":23}
 ```
 
 You can also invoke `ShariffBackend` directly. It returns the share counters for the given URLs on the command line:
