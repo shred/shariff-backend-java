@@ -108,7 +108,7 @@ public class ShariffServletTest {
         servlet.doGet(req, resp);
 
         verify(resp, never()).sendError(anyInt(), anyString());
-        verify(resp).setContentType("Content-type: application/json");
+        verify(resp).setContentType("application/json");
         verify(resp).setCharacterEncoding("utf-8");
 
         assertThat(out.toString(), is("{\"facebook\":123,\"flattr\":456,\"googleplus\":789}"));

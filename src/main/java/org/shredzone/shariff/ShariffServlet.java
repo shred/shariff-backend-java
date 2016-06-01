@@ -194,7 +194,7 @@ public class ShariffServlet extends HttpServlet {
             json.put(count.getKey(), count.getValue());
         }
 
-        resp.setContentType("Content-type: application/json");
+        resp.setContentType("application/json");
         resp.setCharacterEncoding("utf-8");
         resp.getWriter().append(json.toString());
     }
