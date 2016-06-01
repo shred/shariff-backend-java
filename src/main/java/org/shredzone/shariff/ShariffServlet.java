@@ -55,6 +55,23 @@ public class ShariffServlet extends HttpServlet {
     }
 
     /**
+     * Gets the {@link ShariffBackend} instance. If there is no instance yet, it
+     * will be lazily created using {@link #createBackend()}.
+     * <p>
+     * This method is not meant to be overridden, but may be used in subclasses.
+     *
+     * @return {@link ShariffBackend} instance.
+     */
+    protected final ShariffBackend getBackend() {
+        synchronized (this) {
+            if (backend == null) {
+                backend = createBackend();
+            }
+        }
+        return backend;
+    }
+
+    /**
      * Returns the counters for the given url. The result is not cached.
      * <p>
      * Override for using own counter implementations.
@@ -64,7 +81,7 @@ public class ShariffServlet extends HttpServlet {
      * @return Map of counters
      */
     protected Map<String, Integer> getCounts(String url) throws IOException {
-        return backend.getCounts(url);
+        return getBackend().getCounts(url);
     }
 
     /**
@@ -183,10 +200,6 @@ public class ShariffServlet extends HttpServlet {
         if (!isValidHost(url, req)) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "invalid host");
             return;
-        }
-
-        if (backend == null) {
-            backend = createBackend();
         }
 
         JSONObject json = new JSONObject();
