@@ -15,7 +15,6 @@ package org.shredzone.shariff.target;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
@@ -36,26 +35,22 @@ public class Xing extends JSONTarget<JSONObject> {
 
     @Override
     protected HttpURLConnection connect(String url) throws IOException {
-        try {
-            URL connectUrl = new URL("https://www.xing-share.com/spi/shares/statistics");
+        URL connectUrl = new URL("https://www.xing-share.com/spi/shares/statistics");
 
-            HttpURLConnection connection = openConnection(connectUrl);
-            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
-            connection.setRequestMethod("POST");
-            connection.setDoOutput(true);
+        HttpURLConnection connection = openConnection(connectUrl);
+        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
+        connection.setRequestMethod("POST");
+        connection.setDoOutput(true);
 
-            StringBuilder sb = new StringBuilder();
-            sb.append("url=");
-            sb.append(URLEncoder.encode(url, "utf-8"));
+        StringBuilder sb = new StringBuilder();
+        sb.append("url=");
+        sb.append(URLEncoder.encode(url, "utf-8"));
 
-            try (OutputStream out = connection.getOutputStream()) {
-                out.write(sb.toString().getBytes("utf-8"));
-            }
-
-            return connection;
-        } catch (MalformedURLException ex) {
-            throw new IOException(ex);
+        try (OutputStream out = connection.getOutputStream()) {
+            out.write(sb.toString().getBytes("utf-8"));
         }
+
+        return connection;
     }
 
     @Override

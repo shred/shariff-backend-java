@@ -15,7 +15,6 @@ package org.shredzone.shariff.target;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.json.JSONException;
@@ -37,37 +36,33 @@ public class GooglePlus extends JSONTarget<JSONObject> {
 
     @Override
     protected HttpURLConnection connect(String url) throws IOException {
-        try {
-            URL connectUrl = new URL("https://clients6.google.com/rpc?key=" + GOOGLE_KEY);
+        URL connectUrl = new URL("https://clients6.google.com/rpc?key=" + GOOGLE_KEY);
 
-            HttpURLConnection connection = openConnection(connectUrl);
-            connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-            connection.setRequestMethod("POST");
-            connection.setDoOutput(true);
+        HttpURLConnection connection = openConnection(connectUrl);
+        connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+        connection.setRequestMethod("POST");
+        connection.setDoOutput(true);
 
-            try (OutputStream out = connection.getOutputStream()) {
-                JSONObject json = new JSONObject();
+        try (OutputStream out = connection.getOutputStream()) {
+            JSONObject json = new JSONObject();
 
-                json.put("method", "pos.plusones.get")
-                    .put("id", "p")
-                    .put("params", new JSONObject()
-                        .put("nolog", "true")
-                        .put("id", url)
-                        .put("source", "widget")
-                        .put("userId", "@viewer")
-                        .put("groupId", "@self")
-                    )
-                    .put("jsonrpc", "2.0")
-                    .put("key", "p")
-                    .put("apiVersion", "v1");
+            json.put("method", "pos.plusones.get")
+                .put("id", "p")
+                .put("params", new JSONObject()
+                    .put("nolog", "true")
+                    .put("id", url)
+                    .put("source", "widget")
+                    .put("userId", "@viewer")
+                    .put("groupId", "@self")
+                )
+                .put("jsonrpc", "2.0")
+                .put("key", "p")
+                .put("apiVersion", "v1");
 
-                out.write(json.toString().getBytes("utf-8"));
-            }
-
-            return connection;
-        } catch (MalformedURLException ex) {
-            throw new IOException(ex);
+            out.write(json.toString().getBytes("utf-8"));
         }
+
+        return connection;
     }
 
     @Override
