@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Properties;
 
 import org.json.JSONException;
 import org.json.JSONTokener;
@@ -28,6 +29,22 @@ import org.json.JSONTokener;
 public abstract class JSONTarget<T> implements Target {
 
     private static final int HTTP_TIMEOUT_MS = 10000;
+    private static final String USER_AGENT;
+
+    static {
+        StringBuilder agent = new StringBuilder("shariff-backend-java");
+        try {
+            Properties prop = new Properties();
+            prop.load(JSONTarget.class.getResourceAsStream("/org/shredzone/shariff/version.properties"));
+            agent.append('/').append(prop.getProperty("version"));
+        } catch (IOException ex) {
+            // Ignore, just don't use a version
+        }
+
+        agent.append(" Java/").append(System.getProperty("java.version"));
+
+        USER_AGENT = agent.toString();
+    }
 
     @Override
     public int count(String url) throws IOException {
@@ -87,6 +104,7 @@ public abstract class JSONTarget<T> implements Target {
         connection.setUseCaches(false);
         connection.setConnectTimeout(HTTP_TIMEOUT_MS);
         connection.setReadTimeout(HTTP_TIMEOUT_MS);
+        connection.setRequestProperty("User-Agent", USER_AGENT);
         return connection;
     }
 
