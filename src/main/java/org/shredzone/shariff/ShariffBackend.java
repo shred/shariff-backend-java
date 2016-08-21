@@ -134,6 +134,23 @@ public class ShariffBackend {
     }
 
     /**
+     * Returns the Shariff target instance of the given type.
+     *
+     * @param type
+     *            {@link Target} type
+     * @return Instance, or {@code null} if there is no such target available
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends Target> T getTarget(Class<T> type) {
+        for (Target t : targets) {
+            if (type.isInstance(t)) {
+                return (T) t;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Retrieves the counters for the given URL and returns a map of all Shariff targets
      * and the returned counters.
      *
@@ -175,14 +192,17 @@ public class ShariffBackend {
     public static void main(String... args) {
         if (args.length < 1) {
             System.err.println("Usage: ShariffBackend <url> ...");
+            System.err.println("Facebook: use system properties 'facebook.id' and 'facebook.secret'");
             return;
         }
 
+        ShariffBackend backend = new ShariffBackend();
+        Facebook fb = backend.getTarget(Facebook.class);
+        fb.setSecret(System.getProperty("facebook.id"), System.getProperty("facebook.secret"));
 
         for (String url : args) {
             System.out.println(url);
 
-            ShariffBackend backend = new ShariffBackend();
             Map<String, Integer> result = backend.getCounts(url);
             for (Map.Entry<String, Integer> entry : result.entrySet()) {
                 System.out.println(String.format("  %-12s: %d", entry.getKey(), entry.getValue()));

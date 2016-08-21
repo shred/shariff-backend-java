@@ -33,7 +33,10 @@ import org.junit.Test;
 public class FacebookTest {
 
     private static final String TEST_URL = "http://www.heise.de";
-    private static final int SHARE_COUNT = 1234;
+    private static final String ACCESS_TOKEN = "access_token=abcABC123";
+    private static final String CLIENT_ID = "fbclient";
+    private static final String CLIENT_SECRET = "sekrit";
+    private static final int SHARE_COUNT = 7210;
 
     private Facebook target;
 
@@ -42,18 +45,20 @@ public class FacebookTest {
         target = new Facebook() {
             @Override
             protected HttpURLConnection openConnection(URL url) throws IOException {
-                assertThat(url.toExternalForm(), is("https://api.facebook.com/method/fql.query"
-                            + "?format=json"
-                            + "&query="
-                            + URLEncoder.encode("select share_count from link_stat where url=\"" + TEST_URL + "\"", "utf-8")));
-
-                String result = "[{\"share_count\":" + SHARE_COUNT + "}]";
+                assertThat(url.toExternalForm(), is("https://graph.facebook.com/v2.7/"
+                            + "?id=" + URLEncoder.encode(TEST_URL, "utf-8")
+                              + "&" + ACCESS_TOKEN));
 
                 HttpURLConnection connection = mock(HttpURLConnection.class);
                 when(connection.getResponseCode()).thenReturn(HttpURLConnection.HTTP_OK);
-                when(connection.getInputStream()).thenReturn(new ByteArrayInputStream(result.getBytes("utf-8")));
+                when(connection.getInputStream()).thenReturn(FacebookTest.class.getResourceAsStream("/facebook-result.json"));
                 when(connection.getOutputStream()).thenThrow(new IllegalStateException());
                 return connection;
+            }
+
+            @Override
+            protected String getAccessToken() throws IOException {
+                return ACCESS_TOKEN;
             }
         };
     }
@@ -65,7 +70,37 @@ public class FacebookTest {
 
     @Test
     public void counterTest() throws IOException {
+        target.setSecret(CLIENT_ID, CLIENT_SECRET);
         assertThat(target.count(TEST_URL), is(SHARE_COUNT));
+    }
+
+    @Test
+    public void anonymousCounterTest() throws IOException {
+        assertThat(target.count(TEST_URL), is(0));
+    }
+
+    @Test
+    public void accessTokenTest() throws IOException {
+        Facebook tokenTarget = new Facebook() {
+            @Override
+            protected HttpURLConnection openConnection(URL url) throws IOException {
+                assertThat(url.toExternalForm(), is("https://graph.facebook.com/oauth/access_token"
+                            + "?client_id=" + CLIENT_ID
+                            + "&client_secret=" + CLIENT_SECRET
+                            + "&grant_type=client_credentials"));
+
+                HttpURLConnection connection = mock(HttpURLConnection.class);
+                when(connection.getResponseCode()).thenReturn(HttpURLConnection.HTTP_OK);
+                when(connection.getInputStream()).thenReturn(new ByteArrayInputStream(ACCESS_TOKEN.getBytes("utf-8")));
+                when(connection.getOutputStream()).thenThrow(new IllegalStateException());
+                return connection;
+            }
+        };
+
+        tokenTarget.setSecret(CLIENT_ID, CLIENT_SECRET);
+
+        String token = tokenTarget.getAccessToken();
+        assertThat(token, is(ACCESS_TOKEN));
     }
 
 }

@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
+import org.shredzone.shariff.target.Facebook;
 
 /**
  * A servlet that reads the "url" parameter and returns a JSON object containing the
@@ -44,6 +45,7 @@ public class ShariffServlet extends HttpServlet {
     private long timeToLiveMs = 60000L;
     private String[] targets = null;
     private Integer threads = null;
+    private String fbClientId, fbClientSecret;
 
     /**
      * Generates a {@link ShariffBackend}.
@@ -51,7 +53,15 @@ public class ShariffServlet extends HttpServlet {
      * Override for creating custom configured {@link ShariffBackend} instances.
      */
     protected ShariffBackend createBackend() {
-        return new ShariffBackend((targets != null ? Arrays.asList(targets) : null), threads);
+        ShariffBackend backend = new ShariffBackend(
+                        (targets != null ? Arrays.asList(targets) : null), threads);
+
+        Facebook fb = backend.getTarget(Facebook.class);
+        if (fb != null && fbClientId != null && fbClientSecret != null) {
+            fb.setSecret(fbClientId, fbClientSecret);
+        }
+
+        return backend;
     }
 
     /**
@@ -185,6 +195,9 @@ public class ShariffServlet extends HttpServlet {
         if (thr != null) {
             threads = Integer.parseInt(thr);
         }
+
+        fbClientId = config.getInitParameter("facebook.id");
+        fbClientSecret = config.getInitParameter("facebook.secret");
     }
 
     @Override

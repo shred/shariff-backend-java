@@ -12,21 +12,45 @@
  */
 package org.shredzone.shariff.target;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Facebook target.
  *
  * @author Richard "Shred" Körber
  */
-public class Facebook extends JSONTarget<JSONArray> {
+public class Facebook extends JSONTarget<JSONObject> {
+
+    private static final String API_VERSION = "v2.7";
+
+    private String clientId;
+    private String secret;
+    private String accessToken = null;
+
+    /**
+     * Sets the credentials for retrieving an access token.
+     * <p>
+     * This method must be invoked in order to get an access counter from Facebook. If not
+     * set, a zero count will be returned.
+     *
+     * @param clientId
+     *            Client ID
+     * @param secret
+     *            Client Secret
+     */
+    public void setSecret(String clientId, String secret) {
+        this.clientId = clientId;
+        this.secret = secret;
+        this.accessToken = null; // invalidate current access token
+    }
 
     @Override
     public String getName() {
@@ -34,22 +58,48 @@ public class Facebook extends JSONTarget<JSONArray> {
     }
 
     @Override
-    protected HttpURLConnection connect(String url) throws IOException {
-        try {
-            URL connectUrl = new URL("https://api.facebook.com/method/fql.query"
-                            + "?format=json"
-                            + "&query="
-                            + URLEncoder.encode("select share_count from link_stat where url=\"" + url + "\"", "utf-8"));
-
-            return openConnection(connectUrl);
-        } catch (MalformedURLException ex) {
-            throw new IOException(ex);
+    public int count(String url) throws IOException {
+        // Only connect to Facebook API if the credentials are set
+        if (clientId != null && secret != null) {
+            return super.count(url);
+        } else {
+            return 0;
         }
     }
 
     @Override
-    protected int extractCount(JSONArray json) throws JSONException {
-        return json.getJSONObject(0).getInt("share_count");
+    protected HttpURLConnection connect(String url) throws IOException {
+        URL connectUrl = new URL("https://graph.facebook.com/" + API_VERSION +"/"
+                        + "?id=" + URLEncoder.encode(url, "utf-8")
+                        + "&" + getAccessToken());
+        return openConnection(connectUrl);
+    }
+
+    @Override
+    protected int extractCount(JSONObject json) throws JSONException {
+        return json.getJSONObject("share").getInt("share_count");
+    }
+
+    protected synchronized String getAccessToken() throws IOException {
+        if (accessToken == null) {
+            URL tokenUrl = new URL("https://graph.facebook.com/oauth/access_token"
+                            + "?client_id=" + URLEncoder.encode(clientId, "utf-8")
+                            + "&client_secret=" + URLEncoder.encode(secret, "utf-8")
+                            + "&grant_type=client_credentials");
+            HttpURLConnection connection = openConnection(tokenUrl);
+
+            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new IOException("HTTP " + connection.getResponseCode() + ": " + connection.getResponseMessage());
+            }
+
+            try (BufferedReader in = new BufferedReader(
+                            new InputStreamReader(connection.getInputStream()))) {
+                accessToken = in.readLine(); // only one line is expected
+            } finally {
+                connection.disconnect();
+            }
+        }
+        return accessToken;
     }
 
 }

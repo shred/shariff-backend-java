@@ -58,6 +58,9 @@ public class BackendTest {
                 instanceOf(StumbleUpon.class),
                 instanceOf(Xing.class)
         ));
+
+        Flattr flattrTarget = backend.getTarget(Flattr.class);
+        assertThat(flattrTarget, is(notNullValue()));
     }
 
     @SuppressWarnings("unchecked")
