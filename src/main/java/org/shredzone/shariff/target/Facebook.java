@@ -77,7 +77,11 @@ public class Facebook extends JSONTarget<JSONObject> {
 
     @Override
     protected int extractCount(JSONObject json) throws JSONException {
-        return json.getJSONObject("share").getInt("share_count");
+        if (json.has("share")) {
+            return json.getJSONObject("share").getInt("share_count");
+        } else {
+            return 0;
+        }
     }
 
     protected synchronized String getAccessToken() throws IOException {
