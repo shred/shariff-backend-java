@@ -1,4 +1,4 @@
-# Shariff Java Backend ![build status](http://jenkins.shredzone.net/buildStatus/icon?job=shariff-backend-java)
+# Shariff Java Backend ![build status](https://shredzone.org/badge/shariff-backend-java.svg)
 
 [Shariff](https://github.com/heiseonline/shariff) is used to determine how often a page is shared in social media, but without generating requests from the displaying page to the social sites.
 
