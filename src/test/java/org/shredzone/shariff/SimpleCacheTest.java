@@ -60,7 +60,7 @@ public class SimpleCacheTest {
             assertThat(cache.get(ix), is(notNullValue()));
         }
 
-        Thread.sleep(timeout);
+        Thread.sleep(timeout + 10L); // Add a safety margin
 
         for (int ix = 0; ix < 10; ix++) {
             assertThat(cache.get(ix), is(nullValue()));

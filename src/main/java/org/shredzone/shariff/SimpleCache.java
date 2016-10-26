@@ -76,7 +76,7 @@ public class SimpleCache<K, V> {
      *            Cache value
      */
     public void put(K key, V value) {
-        cache.put(key, new Entry<V>(value, System.currentTimeMillis() + timeToLiveMs));
+        cache.put(key, new Entry<>(value, System.currentTimeMillis() + timeToLiveMs));
     }
 
     /**
