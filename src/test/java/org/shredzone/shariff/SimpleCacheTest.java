@@ -15,6 +15,8 @@ package org.shredzone.shariff;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.junit.Test;
 
 /**
@@ -24,9 +26,11 @@ import org.junit.Test;
  */
 public class SimpleCacheTest {
 
+    private static final long TIMEOUT = 10000L;
+
     @Test
     public void maxEntriesTest() {
-        SimpleCache<Integer, String> cache = new SimpleCache<>(10, 10000L);
+        SimpleCache<Integer, String> cache = new SimpleCache<>(10, TIMEOUT);
 
         for (int ix = 0; ix < 20; ix++) {
             cache.put(ix, String.valueOf(ix));
@@ -47,25 +51,45 @@ public class SimpleCacheTest {
     }
 
     @Test
-    public void timeoutTest() throws InterruptedException {
-        final long timeout = 750L;
+    public void timeoutTest() {
+        AtomicBoolean expired = new AtomicBoolean(false);
 
-        SimpleCache<Integer, Object> cache = new SimpleCache<>(10, timeout);
+        SimpleCache<Integer, Object> cache = new SimpleCache<Integer, Object>(10, TIMEOUT) {
+            @Override
+            protected boolean isExpired(long expiry) {
+                return expired.get();
+            }
+        };
 
+        // Fill with 10 entries
         for (int ix = 0; ix < 10; ix++) {
             cache.put(ix, new Object());
         }
+
+        // Not expired yet: make sure all entries are present
         assertThat(cache.size(), is(10));
         for (int ix = 0; ix < 10; ix++) {
             assertThat(cache.get(ix), is(notNullValue()));
         }
 
-        Thread.sleep(timeout + 10L); // Add a safety margin
+        // Now expire all records
+        expired.set(true);
 
+        // Make sure all entries are gone
         for (int ix = 0; ix < 10; ix++) {
             assertThat(cache.get(ix), is(nullValue()));
         }
         assertThat(cache.size(), is(0));
+    }
+
+    @Test
+    public void expireTest() {
+        SimpleCache<Integer, Object> cache = new SimpleCache<>(10, TIMEOUT);
+
+        long now = System.currentTimeMillis();
+
+        assertThat(cache.isExpired(now - 500L), is(true));
+        assertThat(cache.isExpired(now + 500L), is(false));
     }
 
 }

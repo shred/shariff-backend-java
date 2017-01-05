@@ -57,7 +57,7 @@ public class SimpleCache<K, V> {
     public V get(K key) {
         Entry<V> entry = cache.get(key);
 
-        if (entry != null && entry.expiry >= System.currentTimeMillis()) {
+        if (entry != null && !isExpired(entry.expiry)) {
             return entry.value;
         } else if (entry != null) {
             cache.remove(key);
@@ -87,6 +87,17 @@ public class SimpleCache<K, V> {
      */
     protected int size() {
         return cache.size();
+    }
+
+    /**
+     * Checks if the expiry date has been reached.
+     *
+     * @param expiry
+     *            Expiry time to check
+     * @return {@code true} if the expiry date has been reached
+     */
+    protected boolean isExpired(long expiry) {
+        return expiry < System.currentTimeMillis();
     }
 
     /**
