@@ -24,8 +24,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.shredzone.shariff.target.AddThis;
 import org.shredzone.shariff.target.Facebook;
@@ -37,6 +35,8 @@ import org.shredzone.shariff.target.Reddit;
 import org.shredzone.shariff.target.StumbleUpon;
 import org.shredzone.shariff.target.Target;
 import org.shredzone.shariff.target.Xing;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A backend service for performing Shariff requests.
@@ -44,6 +44,7 @@ import org.shredzone.shariff.target.Xing;
  * @author Richard "Shred" Körber
  */
 public class ShariffBackend {
+    private static final Logger LOG = LoggerFactory.getLogger(ShariffBackend.class);
 
     private final List<Target> targets;
     private final ExecutorService executor;
@@ -151,11 +152,10 @@ public class ShariffBackend {
             Target target = getTargets().get(ix);
             try {
                 result.put(target.getName(), futures.get(ix).get());
+            } catch (ExecutionException ex) {
+                LOG.warn("{} @ {}", target.getName(), url, ex.getCause());
             } catch (Exception ex) {
-                Logger.getLogger(ShariffBackend.class.getName()).log(
-                        Level.WARNING,
-                        target.getName() + " @ " + url,
-                        (ex instanceof ExecutionException ? ((ExecutionException) ex).getCause() : ex));
+                LOG.warn("{} @ {}", target.getName(), url, ex);
             }
         }
 

@@ -27,6 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 import org.shredzone.shariff.target.Facebook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A servlet that reads the "url" parameter and returns a JSON object containing the
@@ -36,6 +38,7 @@ import org.shredzone.shariff.target.Facebook;
  */
 public class ShariffServlet extends HttpServlet {
     private static final long serialVersionUID = 3246833254367746537L;
+    private static final Logger LOG = LoggerFactory.getLogger(ShariffServlet.class);
 
     private transient ShariffBackend backend = null;
     private transient SimpleCache<String, Map<String, Integer>> cache = null;
@@ -203,26 +206,31 @@ public class ShariffServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
     throws ServletException, IOException {
-        String url = getUrl(req);
+        try {
+            String url = getUrl(req);
 
-        if (url == null) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing url parameter");
-            return;
+            if (url == null) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "missing url parameter");
+                return;
+            }
+
+            if (!isValidHost(url, req)) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "invalid host");
+                return;
+            }
+
+            JSONObject json = new JSONObject();
+            for (Map.Entry<String, Integer> count : getCountsCached(url).entrySet()) {
+                json.put(count.getKey(), count.getValue());
+            }
+
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding("utf-8");
+            resp.getWriter().append(json.toString());
+        } catch (IOException ex) {
+            LOG.error("Failed to handle Shariff request", ex);
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage()); //NOSONAR
         }
-
-        if (!isValidHost(url, req)) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "invalid host");
-            return;
-        }
-
-        JSONObject json = new JSONObject();
-        for (Map.Entry<String, Integer> count : getCountsCached(url).entrySet()) {
-            json.put(count.getKey(), count.getValue());
-        }
-
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("utf-8");
-        resp.getWriter().append(json.toString());
     }
 
 }
