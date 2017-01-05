@@ -14,6 +14,7 @@ package org.shredzone.shariff;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A very simple cache. It keeps a maximum number of elements for the given time to live.
@@ -38,12 +39,28 @@ public class SimpleCache<K, V> {
      *
      * @param maxEntries
      *            maximum number of elements to keep
+     * @param timeToLive
+     *            maximum time to live for each element
+     * @param unit
+     *            {@link TimeUnit} of timeToLive
+     */
+    public SimpleCache(int maxEntries, long timeToLive, TimeUnit unit) {
+        cache = new CacheMap<>(maxEntries);
+        this.timeToLiveMs = unit.toMillis(timeToLive);
+    }
+
+    /**
+     * Creates a new {@link SimpleCache}.
+     *
+     * @param maxEntries
+     *            maximum number of elements to keep
      * @param timeToLiveMs
      *            maximum time to live for each element
+     * @deprecated Use {@link #SimpleCache(int, long, TimeUnit)}
      */
+    @Deprecated
     public SimpleCache(int maxEntries, long timeToLiveMs) {
-        cache = new CacheMap<>(maxEntries);
-        this.timeToLiveMs = timeToLiveMs;
+        this(maxEntries, timeToLiveMs, TimeUnit.MILLISECONDS);
     }
 
     /**

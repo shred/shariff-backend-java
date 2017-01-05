@@ -17,6 +17,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletConfig;
@@ -112,7 +113,7 @@ public class ShariffServlet extends HttpServlet {
     protected Map<String, Integer> getCountsCached(String url) throws IOException {
         synchronized (this) {
             if (cache == null) {
-                cache = new SimpleCache<>(cacheSize, timeToLiveMs);
+                cache = new SimpleCache<>(cacheSize, timeToLiveMs, TimeUnit.MILLISECONDS);
             }
 
             Map<String, Integer> result = cache.get(url);
