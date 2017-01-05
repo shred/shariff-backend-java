@@ -12,36 +12,25 @@
  */
 package org.shredzone.shariff.target;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-
 import org.json.JSONObject;
+import org.json.JSONTokener;
+import org.shredzone.shariff.api.JSONTarget;
+import org.shredzone.shariff.api.TargetName;
+import org.shredzone.shariff.api.TargetUrl;
 
 /**
  * Flattr target.
  *
  * @author Richard "Shred" Körber
  */
-public class Flattr extends JSONTarget<JSONObject> {
+@TargetName("flattr")
+@TargetUrl("https://api.flattr.com/rest/v2/things/lookup/?url={}")
+public class Flattr extends JSONTarget {
 
     @Override
-    public String getName() {
-        return "flattr";
-    }
-
-    @Override
-    protected HttpURLConnection connect(String url) throws IOException {
-        URL connectUrl = new URL("https://api.flattr.com/rest/v2/things/lookup/?url="
-                        + URLEncoder.encode(url, "utf-8"));
-
-        return openConnection(connectUrl);
-    }
-
-    @Override
-    protected int extractCount(JSONObject json) {
-        return json.optInt("flattrs");
+    protected int extractCount(JSONTokener json) {
+        JSONObject jo = (JSONObject) json.nextValue();
+        return jo.optInt("flattrs");
     }
 
 }

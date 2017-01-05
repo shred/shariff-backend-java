@@ -18,20 +18,19 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.json.JSONObject;
+import org.json.JSONTokener;
+import org.shredzone.shariff.api.JSONTarget;
+import org.shredzone.shariff.api.TargetName;
 
 /**
  * Google Plus target.
  *
  * @author Richard "Shred" Körber
  */
-public class GooglePlus extends JSONTarget<JSONObject> {
+@TargetName("googleplus")
+public class GooglePlus extends JSONTarget {
 
     private static final String GOOGLE_KEY = "AIzaSyCKSbrvQasunBoV16zDH9R33D88CeLr9gQ";
-
-    @Override
-    public String getName() {
-        return "googleplus";
-    }
 
     @Override
     protected HttpURLConnection connect(String url) throws IOException {
@@ -65,8 +64,9 @@ public class GooglePlus extends JSONTarget<JSONObject> {
     }
 
     @Override
-    protected int extractCount(JSONObject json) {
-        return json.getJSONObject("result")
+    protected int extractCount(JSONTokener json) {
+        JSONObject jo = (JSONObject) json.nextValue();
+        return jo.getJSONObject("result")
                         .getJSONObject("metadata")
                         .getJSONObject("globalCounts")
                         .getInt("count");

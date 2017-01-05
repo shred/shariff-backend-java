@@ -12,36 +12,25 @@
  */
 package org.shredzone.shariff.target;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-
 import org.json.JSONObject;
+import org.json.JSONTokener;
+import org.shredzone.shariff.api.JSONTarget;
+import org.shredzone.shariff.api.TargetName;
+import org.shredzone.shariff.api.TargetUrl;
 
 /**
  * AddThis target.
  *
  * @author Richard "Shred" Körber
  */
-public class AddThis extends JSONTarget<JSONObject> {
+@TargetName("addthis")
+@TargetUrl("http://api-public.addthis.com/url/shares.json?url={}")
+public class AddThis extends JSONTarget {
 
     @Override
-    public String getName() {
-        return "addthis";
-    }
-
-    @Override
-    protected HttpURLConnection connect(String url) throws IOException {
-        URL connectUrl = new URL("http://api-public.addthis.com/url/shares.json?url="
-                        + URLEncoder.encode(url, "utf-8"));
-
-        return openConnection(connectUrl);
-    }
-
-    @Override
-    protected int extractCount(JSONObject json) {
-        return json.optInt("shares");
+    protected int extractCount(JSONTokener json) {
+        JSONObject jo = (JSONObject) json.nextValue();
+        return jo.optInt("shares");
     }
 
 }

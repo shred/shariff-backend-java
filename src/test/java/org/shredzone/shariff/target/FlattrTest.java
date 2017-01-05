@@ -18,8 +18,6 @@ import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -40,9 +38,8 @@ public class FlattrTest {
     public void setup() {
         target = new Flattr() {
             @Override
-            protected HttpURLConnection openConnection(URL url) throws IOException {
-                assertThat(url.toExternalForm(), is("https://api.flattr.com/rest/v2/things/lookup/?url="
-                            + URLEncoder.encode(TEST_URL, "utf-8")));
+            protected HttpURLConnection connect(String url) throws IOException {
+                assertThat(url, is(TEST_URL));
                 HttpURLConnection connection = mock(HttpURLConnection.class);
                 when(connection.getResponseCode()).thenReturn(HttpURLConnection.HTTP_OK);
                 when(connection.getInputStream()).thenReturn(FlattrTest.class.getResourceAsStream("/flattr-result.json"));
@@ -54,7 +51,7 @@ public class FlattrTest {
 
     @Test
     public void nameTest() {
-        assertThat(target.getName(), is("flattr"));
+        assertThat(new Flattr().getName(), is("flattr"));
     }
 
     @Test

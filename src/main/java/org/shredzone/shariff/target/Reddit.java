@@ -12,39 +12,29 @@
  */
 package org.shredzone.shariff.target;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONTokener;
+import org.shredzone.shariff.api.JSONTarget;
+import org.shredzone.shariff.api.TargetName;
+import org.shredzone.shariff.api.TargetUrl;
 
 /**
  * Reddit target.
  *
  * @author Richard "Shred" Körber
  */
-public class Reddit extends JSONTarget<JSONObject> {
+@TargetName("reddit")
+@TargetUrl("https://www.reddit.com/api/info.json?url={}")
+public class Reddit extends JSONTarget {
 
     @Override
-    public String getName() {
-        return "reddit";
-    }
+    protected int extractCount(JSONTokener json) {
+        JSONObject jo = (JSONObject) json.nextValue();
 
-    @Override
-    protected HttpURLConnection connect(String url) throws IOException {
-        URL connectUrl = new URL("https://www.reddit.com/api/info.json?url="
-                        + URLEncoder.encode(url, "utf-8"));
-
-        return openConnection(connectUrl);
-    }
-
-    @Override
-    protected int extractCount(JSONObject json) {
         int total = 0;
 
-        JSONArray children = json.getJSONObject("data").getJSONArray("children");
+        JSONArray children = jo.getJSONObject("data").getJSONArray("children");
         for (int ix = 0; ix < children.length(); ix++) {
             total += children.getJSONObject(ix).getJSONObject("data").getInt("score");
         }

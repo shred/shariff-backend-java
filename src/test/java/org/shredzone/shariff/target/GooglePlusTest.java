@@ -59,7 +59,7 @@ public class GooglePlusTest {
 
     @Test
     public void nameTest() {
-        assertThat(target.getName(), is("googleplus"));
+        assertThat(new GooglePlus().getName(), is("googleplus"));
     }
 
     @Test

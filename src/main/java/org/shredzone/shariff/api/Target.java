@@ -10,21 +10,29 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
-package org.shredzone.shariff.target;
+package org.shredzone.shariff.api;
 
 import java.io.IOException;
 
 /**
  * A target for getting the URL counter from.
+ * <p>
+ * Targets usually perform a HTTP request to a web service. However, {@link Target}
+ * implementations could also fetch the data from a database or other sources.
  *
  * @author Richard "Shred" Körber
  */
 public interface Target {
 
     /**
+     * Default implementation that returns the target name from the {@link TargetName}
+     * annotation.
+     *
      * @return name of the target
      */
-    String getName();
+    default String getName() {
+        return getClass().getAnnotation(TargetName.class).value();
+    }
 
     /**
      * Fetches the counter of the target for the given URL.

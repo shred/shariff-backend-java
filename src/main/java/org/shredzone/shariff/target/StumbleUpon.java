@@ -12,37 +12,25 @@
  */
 package org.shredzone.shariff.target;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-
 import org.json.JSONObject;
+import org.json.JSONTokener;
+import org.shredzone.shariff.api.JSONTarget;
+import org.shredzone.shariff.api.TargetName;
+import org.shredzone.shariff.api.TargetUrl;
 
 /**
  * StumbleUpon target.
  *
  * @author Richard "Shred" Körber
  */
-public class StumbleUpon extends JSONTarget<JSONObject> {
+@TargetName("stumbleupon")
+@TargetUrl("https://www.stumbleupon.com/services/1.01/badge.getinfo?url={}")
+public class StumbleUpon extends JSONTarget {
 
     @Override
-    public String getName() {
-        return "stumbleupon";
-    }
-
-    @Override
-    protected HttpURLConnection connect(String url) throws IOException {
-        URL connectUrl = new URL("https://www.stumbleupon.com/services/1.01/badge.getinfo?url="
-                        + URLEncoder.encode(url, "utf-8"));
-
-        return openConnection(connectUrl);
-    }
-
-    @Override
-    protected int extractCount(JSONObject json) {
-        JSONObject result = json.getJSONObject("result");
-        return result.optInt("views");
+    protected int extractCount(JSONTokener json) {
+        JSONObject jo = (JSONObject) json.nextValue();
+        return jo.getJSONObject("result").optInt("views");
     }
 
 }

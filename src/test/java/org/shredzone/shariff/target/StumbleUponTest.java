@@ -18,8 +18,6 @@ import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -40,12 +38,11 @@ public class StumbleUponTest {
     public void setup() {
         target = new StumbleUpon() {
             @Override
-            protected HttpURLConnection openConnection(URL url) throws IOException {
-                assertThat(url.toExternalForm(), is("https://www.stumbleupon.com/services/1.01/badge.getinfo?url="
-                            + URLEncoder.encode(TEST_URL, "utf-8")));
+            protected HttpURLConnection connect(String url) throws IOException {
+                assertThat(url, is(TEST_URL));
                 HttpURLConnection connection = mock(HttpURLConnection.class);
                 when(connection.getResponseCode()).thenReturn(HttpURLConnection.HTTP_OK);
-                when(connection.getInputStream()).thenReturn(FlattrTest.class.getResourceAsStream("/stumbleupon-result.json"));
+                when(connection.getInputStream()).thenReturn(StumbleUponTest.class.getResourceAsStream("/stumbleupon-result.json"));
                 when(connection.getOutputStream()).thenThrow(new IllegalStateException());
                 return connection;
             }
@@ -54,7 +51,7 @@ public class StumbleUponTest {
 
     @Test
     public void nameTest() {
-        assertThat(target.getName(), is("stumbleupon"));
+        assertThat(new StumbleUpon().getName(), is("stumbleupon"));
     }
 
     @Test

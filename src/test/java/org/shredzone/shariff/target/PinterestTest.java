@@ -19,8 +19,6 @@ import static org.mockito.Mockito.*;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -41,9 +39,8 @@ public class PinterestTest {
     public void setup() {
         target = new Pinterest() {
             @Override
-            protected HttpURLConnection openConnection(URL url) throws IOException {
-                assertThat(url.toExternalForm(), is("http://api.pinterest.com/v1/urls/count.json?callback=x&url="
-                            + URLEncoder.encode(TEST_URL, "utf-8")));
+            protected HttpURLConnection connect(String url) throws IOException {
+                assertThat(url, is(TEST_URL));
                 String result = "x({\"url\":\"" + TEST_URL + "\",\"count\":" + LIKE_COUNT + "})";
 
                 HttpURLConnection connection = mock(HttpURLConnection.class);
@@ -57,7 +54,7 @@ public class PinterestTest {
 
     @Test
     public void nameTest() {
-        assertThat(target.getName(), is("pinterest"));
+        assertThat(new Pinterest().getName(), is("pinterest"));
     }
 
     @Test

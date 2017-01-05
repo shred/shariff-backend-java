@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
+import org.shredzone.shariff.api.Target;
 import org.shredzone.shariff.target.AddThis;
 import org.shredzone.shariff.target.Facebook;
 import org.shredzone.shariff.target.Flattr;
@@ -30,7 +31,6 @@ import org.shredzone.shariff.target.LinkedIn;
 import org.shredzone.shariff.target.Pinterest;
 import org.shredzone.shariff.target.Reddit;
 import org.shredzone.shariff.target.StumbleUpon;
-import org.shredzone.shariff.target.Target;
 import org.shredzone.shariff.target.Xing;
 
 /**

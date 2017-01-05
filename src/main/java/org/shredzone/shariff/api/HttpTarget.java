@@ -1,7 +1,7 @@
 /*
  * shariff-backend-java
  *
- * Copyright (C) 2015 Richard "Shred" Körber
+ * Copyright (C) 2017 Richard "Shred" Körber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,27 +10,22 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
-package org.shredzone.shariff.target;
+package org.shredzone.shariff.api;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Properties;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
 /**
- * An abstract {@link Target} for reading JSON responses.
+ * A base {@link Target} implementation that performs HTTP requests.
  *
- * @param <T>
- *            Expected JSON type ({@link JSONObject} or {@link JSONArray})
  * @author Richard "Shred" Körber
  */
-public abstract class JSONTarget<T> implements Target {
+public abstract class HttpTarget implements Target {
 
     private static final int HTTP_TIMEOUT_MS = 10000;
     private static final String USER_AGENT;
@@ -39,7 +34,7 @@ public abstract class JSONTarget<T> implements Target {
         StringBuilder agent = new StringBuilder("shariff-backend-java");
         try {
             Properties prop = new Properties();
-            prop.load(JSONTarget.class.getResourceAsStream("/org/shredzone/shariff/version.properties"));
+            prop.load(HttpTarget.class.getResourceAsStream("/org/shredzone/shariff/version.properties"));
             agent.append('/').append(prop.getProperty("version"));
         } catch (IOException ex) {
             throw new UncheckedIOException(ex);
@@ -59,14 +54,26 @@ public abstract class JSONTarget<T> implements Target {
         }
 
         try (InputStream in = connection.getInputStream()) {
-            return extractCount(read(in));
+            return extractCount(in);
         } finally {
             connection.disconnect();
         }
     }
 
     /**
+     * Extracts the click counter from the API response.
+     *
+     * @param in
+     *            {@link InputStream} of what was returned from the API call
+     * @return Click counter
+     */
+    protected abstract int extractCount(InputStream in) throws IOException;
+
+    /**
      * Connect to the target.
+     * <p>
+     * The default implementation uses the URL template as defined in the
+     * {@link TargetUrl} annotation, and replaces the "{}" placeholder with the given URL.
      *
      * @param url
      *            URL to retrieve the counter for
@@ -74,16 +81,11 @@ public abstract class JSONTarget<T> implements Target {
      * @throws IOException
      *             if the connection could not be established
      */
-    protected abstract HttpURLConnection connect(String url) throws IOException;
-
-    /**
-     * Extracts the click counter from the API connection.
-     *
-     * @param json
-     *            decoded JSON that was returned by the API
-     * @return Click counter
-     */
-    protected abstract int extractCount(T json);
+    protected HttpURLConnection connect(String url) throws IOException {
+        String template = getClass().getAnnotation(TargetUrl.class).value();
+        String connectUrl = template.replace("{}", URLEncoder.encode(url, "utf-8"));
+        return openConnection(new URL(connectUrl));
+    }
 
     /**
      * Opens a connection to the given service API url.
@@ -104,19 +106,6 @@ public abstract class JSONTarget<T> implements Target {
         connection.setReadTimeout(HTTP_TIMEOUT_MS);
         connection.setRequestProperty("User-Agent", USER_AGENT);
         return connection;
-    }
-
-    /**
-     * Reads data from input stream and provides a result object.
-     *
-     * @param in
-     *            {@link InputStream} to read from
-     * @return Read object
-     */
-    @SuppressWarnings("unchecked")
-    protected T read(InputStream in) throws IOException {
-        // This is ugly, but there is no supertype for JSONObject and JSONArray
-        return (T) new JSONTokener(in).nextValue();
     }
 
 }

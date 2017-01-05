@@ -18,8 +18,6 @@ import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -40,12 +38,12 @@ public class AddThisTest {
     public void setup() {
         target = new AddThis() {
             @Override
-            protected HttpURLConnection openConnection(URL url) throws IOException {
-                assertThat(url.toExternalForm(), is("http://api-public.addthis.com/url/shares.json?url="
-                            + URLEncoder.encode(TEST_URL, "utf-8")));
+            protected HttpURLConnection connect(String url) throws IOException {
+                assertThat(url, is(TEST_URL));
+
                 HttpURLConnection connection = mock(HttpURLConnection.class);
                 when(connection.getResponseCode()).thenReturn(HttpURLConnection.HTTP_OK);
-                when(connection.getInputStream()).thenReturn(FlattrTest.class.getResourceAsStream("/addthis-result.json"));
+                when(connection.getInputStream()).thenReturn(AddThisTest.class.getResourceAsStream("/addthis-result.json"));
                 when(connection.getOutputStream()).thenThrow(new IllegalStateException());
                 return connection;
             }
@@ -54,7 +52,7 @@ public class AddThisTest {
 
     @Test
     public void nameTest() {
-        assertThat(target.getName(), is("addthis"));
+        assertThat(new AddThis().getName(), is("addthis"));
     }
 
     @Test

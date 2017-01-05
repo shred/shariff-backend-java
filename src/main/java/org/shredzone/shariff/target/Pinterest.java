@@ -12,45 +12,26 @@
  */
 package org.shredzone.shariff.target;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.shredzone.shariff.api.JSONTarget;
+import org.shredzone.shariff.api.TargetName;
+import org.shredzone.shariff.api.TargetUrl;
 
 /**
  * Pinterest target.
  *
  * @author Richard "Shred" Körber
  */
-public class Pinterest extends JSONTarget<JSONObject> {
+@TargetName("pinterest")
+@TargetUrl("http://api.pinterest.com/v1/urls/count.json?callback=x&url={}")
+public class Pinterest extends JSONTarget {
 
     @Override
-    public String getName() {
-        return "pinterest";
-    }
-
-    @Override
-    protected HttpURLConnection connect(String url) throws IOException {
-        URL connectUrl = new URL("http://api.pinterest.com/v1/urls/count.json?callback=x&url="
-                        + URLEncoder.encode(url, "utf-8"));
-
-        return openConnection(connectUrl);
-    }
-
-    @Override
-    protected JSONObject read(InputStream in) throws IOException {
-        JSONTokener tokener = new JSONTokener(in);
-        tokener.nextValue(); // Ignore function call
-        return (JSONObject) tokener.nextValue();
-    }
-
-    @Override
-    protected int extractCount(JSONObject json) {
-        return json.getInt("count");
+    protected int extractCount(JSONTokener json) {
+        json.nextValue(); // Ignore function call
+        JSONObject jo = (JSONObject) json.nextValue();
+        return jo.getInt("count");
     }
 
 }

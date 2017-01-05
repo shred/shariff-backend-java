@@ -61,7 +61,7 @@ public class XingTest {
 
     @Test
     public void nameTest() {
-        assertThat(target.getName(), is("xing"));
+        assertThat(new Xing().getName(), is("xing"));
     }
 
     @Test

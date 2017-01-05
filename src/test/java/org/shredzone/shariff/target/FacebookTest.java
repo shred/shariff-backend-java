@@ -65,7 +65,7 @@ public class FacebookTest {
 
     @Test
     public void nameTest() {
-        assertThat(target.getName(), is("facebook"));
+        assertThat(new Facebook().getName(), is("facebook"));
     }
 
     @Test
@@ -74,9 +74,9 @@ public class FacebookTest {
         assertThat(target.count(TEST_URL), is(SHARE_COUNT));
     }
 
-    @Test
+    @Test(expected = IllegalStateException.class)
     public void anonymousCounterTest() throws IOException {
-        assertThat(target.count(TEST_URL), is(0));
+        target.count(TEST_URL);
     }
 
     @Test

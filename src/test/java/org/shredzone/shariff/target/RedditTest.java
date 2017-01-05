@@ -18,8 +18,6 @@ import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -40,12 +38,12 @@ public class RedditTest {
     public void setup() {
         target = new Reddit() {
             @Override
-            protected HttpURLConnection openConnection(URL url) throws IOException {
-                assertThat(url.toExternalForm(), is("https://www.reddit.com/api/info.json?url="
-                            + URLEncoder.encode(TEST_URL, "utf-8")));
+            protected HttpURLConnection connect(String url) throws IOException {
+                assertThat(url, is(TEST_URL));
+
                 HttpURLConnection connection = mock(HttpURLConnection.class);
                 when(connection.getResponseCode()).thenReturn(HttpURLConnection.HTTP_OK);
-                when(connection.getInputStream()).thenReturn(FlattrTest.class.getResourceAsStream("/reddit-result.json"));
+                when(connection.getInputStream()).thenReturn(RedditTest.class.getResourceAsStream("/reddit-result.json"));
                 when(connection.getOutputStream()).thenThrow(new IllegalStateException());
                 return connection;
             }
@@ -54,7 +52,7 @@ public class RedditTest {
 
     @Test
     public void nameTest() {
-        assertThat(target.getName(), is("reddit"));
+        assertThat(new Reddit().getName(), is("reddit"));
     }
 
     @Test

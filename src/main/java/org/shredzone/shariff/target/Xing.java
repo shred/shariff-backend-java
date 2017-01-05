@@ -19,18 +19,17 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 import org.json.JSONObject;
+import org.json.JSONTokener;
+import org.shredzone.shariff.api.JSONTarget;
+import org.shredzone.shariff.api.TargetName;
 
 /**
  * Xing target.
  *
  * @author Richard "Shred" Körber
  */
-public class Xing extends JSONTarget<JSONObject> {
-
-    @Override
-    public String getName() {
-        return "xing";
-    }
+@TargetName("xing")
+public class Xing extends JSONTarget {
 
     @Override
     protected HttpURLConnection connect(String url) throws IOException {
@@ -53,8 +52,9 @@ public class Xing extends JSONTarget<JSONObject> {
     }
 
     @Override
-    protected int extractCount(JSONObject json) {
-        return json.getInt("share_counter");
+    protected int extractCount(JSONTokener json) {
+        JSONObject jo = (JSONObject) json.nextValue();
+        return jo.getInt("share_counter");
     }
 
 }

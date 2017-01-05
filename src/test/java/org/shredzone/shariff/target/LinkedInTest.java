@@ -19,8 +19,6 @@ import static org.mockito.Mockito.*;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -41,9 +39,8 @@ public class LinkedInTest {
     public void setup() {
         target = new LinkedIn() {
             @Override
-            protected HttpURLConnection openConnection(URL url) throws IOException {
-                assertThat(url.toExternalForm(), is("https://www.linkedin.com/countserv/count/share?url="
-                            + URLEncoder.encode(TEST_URL, "utf-8")));
+            protected HttpURLConnection connect(String url) throws IOException {
+                assertThat(url, is(TEST_URL));
                 String result = "IN.Tags.Share.handleCount({\"count\":" + LIKE_COUNT + ",\"fCnt\":\"121\",\"fCntPlusOne\":\"122\",\"url\":\"" + TEST_URL.replace("/", "\\/") + "\"});";
 
                 HttpURLConnection connection = mock(HttpURLConnection.class);
@@ -57,7 +54,7 @@ public class LinkedInTest {
 
     @Test
     public void nameTest() {
-        assertThat(target.getName(), is("linkedin"));
+        assertThat(new LinkedIn().getName(), is("linkedin"));
     }
 
     @Test

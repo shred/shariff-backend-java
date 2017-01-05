@@ -20,13 +20,17 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 import org.json.JSONObject;
+import org.json.JSONTokener;
+import org.shredzone.shariff.api.JSONTarget;
+import org.shredzone.shariff.api.TargetName;
 
 /**
  * Facebook target.
  *
  * @author Richard "Shred" Körber
  */
-public class Facebook extends JSONTarget<JSONObject> {
+@TargetName("facebook")
+public class Facebook extends JSONTarget {
 
     private static final String API_VERSION = "v2.7";
     private static final String UTF_8 = "utf-8";
@@ -53,18 +57,11 @@ public class Facebook extends JSONTarget<JSONObject> {
     }
 
     @Override
-    public String getName() {
-        return "facebook";
-    }
-
-    @Override
     public int count(String url) throws IOException {
-        // Only connect to Facebook API if the credentials are set
-        if (clientId != null && secret != null) {
-            return super.count(url);
-        } else {
-            return 0;
+        if (clientId == null || secret == null) {
+            throw new IllegalStateException("You need to set a clientId and a secret");
         }
+        return super.count(url);
     }
 
     @Override
@@ -76,9 +73,10 @@ public class Facebook extends JSONTarget<JSONObject> {
     }
 
     @Override
-    protected int extractCount(JSONObject json) {
-        if (json.has("share")) {
-            return json.getJSONObject("share").getInt("share_count");
+    protected int extractCount(JSONTokener json) {
+        JSONObject jo = (JSONObject) json.nextValue();
+        if (jo.has("share")) {
+            return jo.getJSONObject("share").getInt("share_count");
         } else {
             return 0;
         }
