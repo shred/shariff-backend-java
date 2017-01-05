@@ -19,6 +19,7 @@ This Shariff backend is not a part of the official backends by Heise Online! It 
 * Parallel counter fetching to minimize response time
 * Comes with a simple caching mechanism that can be replaced by other cache solutions like [Ehcache](http://ehcache.org)
 * Built with maven, package is available at Maven Central
+* Requires Java 8 or higher
 
 ## Installing the Shariff backend on your own server
 

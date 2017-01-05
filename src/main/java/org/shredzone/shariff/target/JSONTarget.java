@@ -54,12 +54,10 @@ public abstract class JSONTarget<T> implements Target {
             throw new IOException("HTTP " + connection.getResponseCode() + ": " + connection.getResponseMessage());
         }
 
-        try {
-            try (InputStream in = connection.getInputStream()) {
-                return extractCount(read(in));
-            } catch (JSONException ex) {
-                throw new IllegalArgumentException(ex);
-            }
+        try (InputStream in = connection.getInputStream()) {
+            return extractCount(read(in));
+        } catch (JSONException ex) {
+            throw new IllegalArgumentException(ex);
         } finally {
             connection.disconnect();
         }

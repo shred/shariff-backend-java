@@ -12,20 +12,18 @@
  */
 package org.shredzone.shariff;
 
-import java.util.ArrayList;
+import static java.util.stream.Collectors.toList;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -81,32 +79,19 @@ public class ShariffBackend {
      *            are targets.
      */
     public ShariffBackend(Collection<String> names, Integer maxThreads) {
-        List<Target> list = new ArrayList<>(createTargets());
-
-        if (names != null) {
-            Iterator<Target> it = list.iterator();
-            while (it.hasNext()) {
-                if (!names.contains(it.next().getName())) {
-                    it.remove();
-                }
-            }
-        }
-
-        final ThreadGroup group = new ThreadGroup("shariff");
-
-        ThreadFactory factory = new ThreadFactory() {
-            @Override
-            public Thread newThread(Runnable r) {
-                Thread t = new Thread(group, r);
-                t.setDaemon(true);
-                return t;
-            }
-        };
-
+        List<Target> list = createTargets().stream()
+                    .filter(target -> names == null || names.contains(target.getName()))
+                    .collect(toList());
         targets = Collections.unmodifiableList(list);
+
+        ThreadGroup group = new ThreadGroup("shariff");
         executor =  Executors.newFixedThreadPool(
-                        (maxThreads != null ? maxThreads : targets.size()),
-                        factory);
+                maxThreads != null ? maxThreads : targets.size(),
+                runnable -> {
+                    Thread t = new Thread(group, runnable);
+                    t.setDaemon(true);
+                    return t;
+                });
     }
 
     /**
@@ -140,14 +125,12 @@ public class ShariffBackend {
      *            {@link Target} type
      * @return Instance, or {@code null} if there is no such target available
      */
-    @SuppressWarnings("unchecked")
     public <T extends Target> T getTarget(Class<T> type) {
-        for (Target t : targets) {
-            if (type.isInstance(t)) {
-                return (T) t;
-            }
-        }
-        return null;
+        return targets.stream()
+                .filter(type::isInstance)
+                .findFirst()
+                .map(type::cast)
+                .orElse(null);
     }
 
     /**
@@ -158,17 +141,10 @@ public class ShariffBackend {
      *            URL to get the counters for
      * @return Map containing the target name as key, and the counter as value
      */
-    public Map<String, Integer> getCounts(final String url) {
-        List<Future<Integer>> futures = new ArrayList<>(getTargets().size());
-
-        for (final Target target : getTargets()) {
-            futures.add(executor.submit(new Callable<Integer>() {
-                @Override
-                public Integer call() throws Exception {
-                    return target.count(url);
-                }
-            }));
-        }
+    public Map<String, Integer> getCounts(String url) {
+        List<Future<Integer>> futures = getTargets().stream()
+            .map(target -> executor.submit(() -> target.count(url)))
+            .collect(toList());
 
         Map<String, Integer> result = new HashMap<>();
         for (int ix = 0; ix < futures.size(); ix++) {
@@ -203,10 +179,8 @@ public class ShariffBackend {
         for (String url : args) {
             System.out.println(url);
 
-            Map<String, Integer> result = backend.getCounts(url);
-            for (Map.Entry<String, Integer> entry : result.entrySet()) {
-                System.out.println(String.format("  %-12s: %d", entry.getKey(), entry.getValue()));
-            }
+            backend.getCounts(url).forEach((key, value) ->
+                    System.out.println(String.format("  %-12s: %d", key, value)));
 
             System.out.println();
         }
