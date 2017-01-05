@@ -17,7 +17,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -27,7 +26,7 @@ import org.json.JSONObject;
  */
 public class GooglePlus extends JSONTarget<JSONObject> {
 
-    private final static String GOOGLE_KEY = "AIzaSyCKSbrvQasunBoV16zDH9R33D88CeLr9gQ";
+    private static final String GOOGLE_KEY = "AIzaSyCKSbrvQasunBoV16zDH9R33D88CeLr9gQ";
 
     @Override
     public String getName() {
@@ -66,7 +65,7 @@ public class GooglePlus extends JSONTarget<JSONObject> {
     }
 
     @Override
-    protected int extractCount(JSONObject json) throws JSONException {
+    protected int extractCount(JSONObject json) {
         return json.getJSONObject("result")
                         .getJSONObject("metadata")
                         .getJSONObject("globalCounts")

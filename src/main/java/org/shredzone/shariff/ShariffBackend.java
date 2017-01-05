@@ -153,6 +153,7 @@ public class ShariffBackend {
             try {
                 result.put(target.getName(), futures.get(ix).get());
             } catch (ExecutionException ex) {
+                LOG.trace("Caught exception from {}", target.getName(), ex);
                 LOG.warn("{} @ {}", target.getName(), url, ex.getCause());
             } catch (Exception ex) {
                 LOG.warn("{} @ {}", target.getName(), url, ex);

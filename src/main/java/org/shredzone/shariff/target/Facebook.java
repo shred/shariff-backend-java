@@ -19,7 +19,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -30,6 +29,7 @@ import org.json.JSONObject;
 public class Facebook extends JSONTarget<JSONObject> {
 
     private static final String API_VERSION = "v2.7";
+    private static final String UTF_8 = "utf-8";
 
     private String clientId;
     private String secret;
@@ -70,13 +70,13 @@ public class Facebook extends JSONTarget<JSONObject> {
     @Override
     protected HttpURLConnection connect(String url) throws IOException {
         URL connectUrl = new URL("https://graph.facebook.com/" + API_VERSION +"/"
-                        + "?id=" + URLEncoder.encode(url, "utf-8")
+                        + "?id=" + URLEncoder.encode(url, UTF_8)
                         + "&" + getAccessToken());
         return openConnection(connectUrl);
     }
 
     @Override
-    protected int extractCount(JSONObject json) throws JSONException {
+    protected int extractCount(JSONObject json) {
         if (json.has("share")) {
             return json.getJSONObject("share").getInt("share_count");
         } else {
@@ -87,8 +87,8 @@ public class Facebook extends JSONTarget<JSONObject> {
     protected synchronized String getAccessToken() throws IOException {
         if (accessToken == null) {
             URL tokenUrl = new URL("https://graph.facebook.com/oauth/access_token"
-                            + "?client_id=" + URLEncoder.encode(clientId, "utf-8")
-                            + "&client_secret=" + URLEncoder.encode(secret, "utf-8")
+                            + "?client_id=" + URLEncoder.encode(clientId, UTF_8)
+                            + "&client_secret=" + URLEncoder.encode(secret, UTF_8)
                             + "&grant_type=client_credentials");
             HttpURLConnection connection = openConnection(tokenUrl);
 

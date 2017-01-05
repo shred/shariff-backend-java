@@ -14,16 +14,20 @@ package org.shredzone.shariff.target;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Properties;
 
-import org.json.JSONException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.json.JSONTokener;
 
 /**
  * An abstract {@link Target} for reading JSON responses.
  *
+ * @param <T>
+ *            Expected JSON type ({@link JSONObject} or {@link JSONArray})
  * @author Richard "Shred" Körber
  */
 public abstract class JSONTarget<T> implements Target {
@@ -38,7 +42,7 @@ public abstract class JSONTarget<T> implements Target {
             prop.load(JSONTarget.class.getResourceAsStream("/org/shredzone/shariff/version.properties"));
             agent.append('/').append(prop.getProperty("version"));
         } catch (IOException ex) {
-            // Ignore, just don't use a version
+            throw new UncheckedIOException(ex);
         }
 
         agent.append(" Java/").append(System.getProperty("java.version"));
@@ -56,8 +60,6 @@ public abstract class JSONTarget<T> implements Target {
 
         try (InputStream in = connection.getInputStream()) {
             return extractCount(read(in));
-        } catch (JSONException ex) {
-            throw new IllegalArgumentException(ex);
         } finally {
             connection.disconnect();
         }
@@ -80,10 +82,8 @@ public abstract class JSONTarget<T> implements Target {
      * @param json
      *            decoded JSON that was returned by the API
      * @return Click counter
-     * @throws JSONException
-     *             if the JSON could not be read or the counter field was missing
      */
-    protected abstract int extractCount(T json) throws JSONException;
+    protected abstract int extractCount(T json);
 
     /**
      * Opens a connection to the given service API url.

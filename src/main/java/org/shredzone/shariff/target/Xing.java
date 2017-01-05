@@ -18,7 +18,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -54,7 +53,7 @@ public class Xing extends JSONTarget<JSONObject> {
     }
 
     @Override
-    protected int extractCount(JSONObject json) throws JSONException {
+    protected int extractCount(JSONObject json) {
         return json.getInt("share_counter");
     }
 

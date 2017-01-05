@@ -17,7 +17,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -41,9 +40,9 @@ public class StumbleUpon extends JSONTarget<JSONObject> {
     }
 
     @Override
-    protected int extractCount(JSONObject json) throws JSONException {
+    protected int extractCount(JSONObject json) {
         JSONObject result = json.getJSONObject("result");
-        return (result.has("views") ? result.getInt("views") : 0);
+        return result.optInt("views");
     }
 
 }

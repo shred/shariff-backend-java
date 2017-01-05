@@ -17,7 +17,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -41,8 +40,8 @@ public class Flattr extends JSONTarget<JSONObject> {
     }
 
     @Override
-    protected int extractCount(JSONObject json) throws JSONException {
-        return (json.has("flattrs") ? json.getInt("flattrs") : 0);
+    protected int extractCount(JSONObject json) {
+        return json.optInt("flattrs");
     }
 
 }

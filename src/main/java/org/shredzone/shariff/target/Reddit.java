@@ -18,7 +18,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -42,7 +41,7 @@ public class Reddit extends JSONTarget<JSONObject> {
     }
 
     @Override
-    protected int extractCount(JSONObject json) throws JSONException {
+    protected int extractCount(JSONObject json) {
         int total = 0;
 
         JSONArray children = json.getJSONObject("data").getJSONArray("children");

@@ -92,7 +92,7 @@ public class SimpleCache<K, V> {
     /**
      * A {@link LinkedHashMap} that keeps the given maximum number of elements.
      */
-    private static class CacheMap<T, U> extends LinkedHashMap<T, U> {
+    private static class CacheMap<T, U> extends LinkedHashMap<T, U> { //NOSONAR: S2160 false positive
         private static final long serialVersionUID = -294328016365489050L;
 
         private final int maxEntries;
@@ -110,7 +110,7 @@ public class SimpleCache<K, V> {
 
         @Override
         protected boolean removeEldestEntry(Map.Entry<T, U> eldest) {
-            return size() > maxEntries;
+            return super.size() > maxEntries;
         }
     }
 

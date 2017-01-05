@@ -22,7 +22,7 @@ import java.io.IOException;
 public interface Target {
 
     /**
-     * Name of the target.
+     * @return name of the target
      */
     String getName();
 

@@ -40,15 +40,16 @@ public class ShariffServlet extends HttpServlet {
     private static final long serialVersionUID = 3246833254367746537L;
     private static final Logger LOG = LoggerFactory.getLogger(ShariffServlet.class);
 
-    private transient ShariffBackend backend = null;
-    private transient SimpleCache<String, Map<String, Integer>> cache = null;
+    private transient ShariffBackend backend = null; //NOSONAR: wrongfully complains about transient
+    private transient SimpleCache<String, Map<String, Integer>> cache = null;  //NOSONAR: wrongfully complains about transient
 
     private Pattern hostPattern = null;
     private int cacheSize = 1000;
     private long timeToLiveMs = 60000L;
     private String[] targets = null;
     private Integer threads = null;
-    private String fbClientId, fbClientSecret;
+    private String fbClientId;
+    private String fbClientSecret;
 
     /**
      * Generates a {@link ShariffBackend}.
@@ -56,15 +57,16 @@ public class ShariffServlet extends HttpServlet {
      * Override for creating custom configured {@link ShariffBackend} instances.
      */
     protected ShariffBackend createBackend() {
-        ShariffBackend backend = new ShariffBackend(
-                        (targets != null ? Arrays.asList(targets) : null), threads);
+        ShariffBackend instance = new ShariffBackend(
+                        targets != null ? Arrays.asList(targets) : null,
+                        threads);
 
-        Facebook fb = backend.getTarget(Facebook.class);
+        Facebook fb = instance.getTarget(Facebook.class);
         if (fb != null && fbClientId != null && fbClientSecret != null) {
             fb.setSecret(fbClientId, fbClientSecret);
         }
 
-        return backend;
+        return instance;
     }
 
     /**
@@ -227,7 +229,7 @@ public class ShariffServlet extends HttpServlet {
             resp.setContentType("application/json");
             resp.setCharacterEncoding("utf-8");
             resp.getWriter().append(json.toString());
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             LOG.error("Failed to handle Shariff request", ex);
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage()); //NOSONAR
         }
