@@ -12,7 +12,7 @@
  */
 package org.shredzone.shariff;
 
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -23,6 +23,7 @@ import java.io.StringWriter;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -112,6 +113,33 @@ public class ShariffServletTest {
         verify(resp).setCharacterEncoding("utf-8");
 
         assertThat(out.toString(), is("{\"facebook\":123,\"flattr\":456,\"googleplus\":789}"));
+    }
+
+    @Test
+    public void initTest() throws ServletException, IOException {
+        ShariffServlet realServlet = new ShariffServlet();
+
+        ServletConfig config = mock(ServletConfig.class);
+        when(config.getInitParameter("host")).thenReturn("http://example\\.com");
+        when(config.getInitParameter("cacheSize")).thenReturn("50");
+        when(config.getInitParameter("cacheTimeToLiveMs")).thenReturn("1000000");
+        when(config.getInitParameter("targets")).thenReturn("facebook,googleplus");
+        when(config.getInitParameter("threads")).thenReturn("5");
+        when(config.getInitParameter("facebook.id")).thenReturn("12345");
+        when(config.getInitParameter("facebook.secret")).thenReturn("54321");
+
+        realServlet.init(config);
+
+        assertThat(realServlet.hostPattern.pattern(), is("http://example\\.com"));
+        assertThat(realServlet.cacheSize, is(50));
+        assertThat(realServlet.timeToLiveMs, is(1000000L));
+        assertThat(realServlet.targets, is(arrayContaining("facebook", "googleplus")));
+        assertThat(realServlet.threads, is(5));
+        assertThat(realServlet.fbClientId, is("12345"));
+        assertThat(realServlet.fbClientSecret, is("54321"));
+
+        ShariffBackend backend = realServlet.createBackend();
+        assertThat(backend.getTargets().size(), is(2));
     }
 
 }

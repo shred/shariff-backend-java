@@ -44,13 +44,13 @@ public class ShariffServlet extends HttpServlet {
     private transient ShariffBackend backend = null; //NOSONAR: wrongfully complains about transient
     private transient SimpleCache<String, Map<String, Integer>> cache = null;  //NOSONAR: wrongfully complains about transient
 
-    private Pattern hostPattern = null;
-    private int cacheSize = 1000;
-    private long timeToLiveMs = 60000L;
-    private String[] targets = null;
-    private Integer threads = null;
-    private String fbClientId;
-    private String fbClientSecret;
+    protected Pattern hostPattern = null;
+    protected int cacheSize = 1000;
+    protected long timeToLiveMs = 60000L;
+    protected String[] targets = null;
+    protected Integer threads = null;
+    protected String fbClientId;
+    protected String fbClientSecret;
 
     /**
      * Generates a {@link ShariffBackend}.
