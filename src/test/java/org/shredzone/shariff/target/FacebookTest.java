@@ -36,7 +36,7 @@ public class FacebookTest {
     private static final String ACCESS_TOKEN = "access_token=abcABC123";
     private static final String CLIENT_ID = "fbclient";
     private static final String CLIENT_SECRET = "sekrit";
-    private static final int SHARE_COUNT = 7210;
+    private static final int SHARE_COUNT = 7710;
 
     private Facebook target;
 
@@ -45,7 +45,7 @@ public class FacebookTest {
         target = new Facebook() {
             @Override
             protected HttpURLConnection openConnection(URL url) throws IOException {
-                assertThat(url.toExternalForm(), is("https://graph.facebook.com/v2.7/"
+                assertThat(url.toExternalForm(), is("https://graph.facebook.com/v2.8/"
                             + "?id=" + URLEncoder.encode(TEST_URL, "utf-8")
                               + "&" + ACCESS_TOKEN));
 
