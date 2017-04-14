@@ -6,11 +6,10 @@
 
 This document describes the Java backend. The following backends are also available:
 
-* [shariff-backend-node](https://github.com/heiseonline/shariff-backend-node)
-* [shariff-backend-perl](https://github.com/heiseonline/shariff-backend-perl)
 * [shariff-backend-php](https://github.com/heiseonline/shariff-backend-php)
+* [shariff-backend-perl](https://github.com/heiseonline/shariff-backend-perl)
 
-This Shariff backend is not a part of the official backends by Heise Online! It bases on the work of [shariff-backend-php](https://github.com/heiseonline/shariff-backend-php).
+This Shariff backend is not a part of the official backends by Heise Online!
 
 ## Features
 
@@ -20,7 +19,7 @@ This Shariff backend is not a part of the official backends by Heise Online! It 
 * Comes with a simple caching mechanism that can be replaced by other cache solutions like [Ehcache](http://ehcache.org)
 * Built with maven, package is available at Maven Central
 * Uses `slf4j`, for log output just add a binding to your classpath
-* Requires Java 8 or higher
+* Requires Java 8 or higher (Java 7 up to version 1.1)
 
 ## Installing the Shariff backend on your own server
 
