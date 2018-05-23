@@ -32,7 +32,7 @@ import org.shredzone.shariff.api.TargetName;
 @TargetName("facebook")
 public class Facebook extends JSONTarget {
 
-    private static final String API_VERSION = "v2.8";
+    private static final String API_VERSION = "v2.12";
     private static final String UTF_8 = "utf-8";
 
     private String clientId;
@@ -68,6 +68,7 @@ public class Facebook extends JSONTarget {
     protected HttpURLConnection connect(String url) throws IOException {
         URL connectUrl = new URL("https://graph.facebook.com/" + API_VERSION +"/"
                         + "?id=" + URLEncoder.encode(url, UTF_8)
+                        + "&fields=engagement"
                         + "&" + getAccessToken());
         return openConnection(connectUrl);
     }
@@ -75,8 +76,11 @@ public class Facebook extends JSONTarget {
     @Override
     protected int extractCount(JSONTokener json) {
         JSONObject jo = (JSONObject) json.nextValue();
-        if (jo.has("share")) {
-            return jo.getJSONObject("share").getInt("share_count");
+        if (jo.has("engagement")) {
+            JSONObject eo = jo.getJSONObject("engagement");
+            return eo.optInt("reaction_count")
+                    + eo.optInt("comment_count")
+                    + eo.optInt("share_count");
         } else {
             return 0;
         }

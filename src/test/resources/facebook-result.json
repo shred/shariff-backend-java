@@ -1,14 +1,9 @@
 {
-  "og_object": {
-    "id": "331776430263909",
-    "description": "News und Foren zu Computer, IT, Wissenschaft, Medien und Politik. Preisvergleich von Hardware und Software sowie Downloads bei Heise Medien.",
-    "title": "IT-News, c't, iX, Technology Review, Telepolis",
-    "type": "website",
-    "updated_time": "2017-04-09T10:57:59+0000"
-  },
-  "share": {
-    "comment_count": 0,
-    "share_count": 7710
+  "engagement": {
+    "reaction_count": 1780,
+    "comment_count": 1229,
+    "share_count": 6004,
+    "comment_plugin_count": 0
   },
   "id": "http://www.heise.de"
 }
