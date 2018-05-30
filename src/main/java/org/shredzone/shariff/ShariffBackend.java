@@ -33,6 +33,7 @@ import org.shredzone.shariff.target.LinkedIn;
 import org.shredzone.shariff.target.Pinterest;
 import org.shredzone.shariff.target.Reddit;
 import org.shredzone.shariff.target.StumbleUpon;
+import org.shredzone.shariff.target.Vk;
 import org.shredzone.shariff.target.Xing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,6 +107,7 @@ public class ShariffBackend {
                 new Pinterest(),
                 new Reddit(),
                 new StumbleUpon(),
+                new Vk(),
                 new Xing()
         );
     }
