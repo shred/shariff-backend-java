@@ -2,8 +2,6 @@
 
 [Shariff](https://github.com/heiseonline/shariff) is used to determine how often a page is shared in social media, but without generating requests from the displaying page to the social sites.
 
-![Shariff Logo © 2014 Heise Zeitschriften Verlag](http://www.heise.de/icons/ho/shariff-logo.png)
-
 This document describes the Java backend. It is some kind of a port of the [offical Shariff PHP backend](https://github.com/heiseonline/shariff-backend-php).
 
 This Shariff backend is not a part of the official backends by Heise Online!
@@ -50,7 +48,7 @@ The following configuration options are available:
 
 | Key         | Description |
 |-------------|-------------|
-| `host `     | Regular expression of acceptable hosts (e.g. "^(.*\\.)?example\\.com$"). If unset, only the host of the servlet is accepted. |
+| `host `     | Regular expression of acceptable hosts (e.g. "^(.*\\.)?example\\.com$"). If unset, only the host of the servlet is accepted. It's recommended to keep foreign websites from using your Shariff server. |
 | `cacheSize` | Maximum number of urls to be cached in memory. Default is 1000. |
 | `cacheTimeToLiveMs` | Maximum time urls are cached, in ms. Default is 1 minute. |
 | `targets`   | List of services to be enabled (see [Features](#features)). Case sensitive. Services must be separated by comma. Default is all available services. |
