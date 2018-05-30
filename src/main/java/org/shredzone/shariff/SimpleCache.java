@@ -50,20 +50,6 @@ public class SimpleCache<K, V> {
     }
 
     /**
-     * Creates a new {@link SimpleCache}.
-     *
-     * @param maxEntries
-     *            maximum number of elements to keep
-     * @param timeToLiveMs
-     *            maximum time to live for each element
-     * @deprecated Use {@link #SimpleCache(int, long, TimeUnit)}
-     */
-    @Deprecated
-    public SimpleCache(int maxEntries, long timeToLiveMs) {
-        this(maxEntries, timeToLiveMs, TimeUnit.MILLISECONDS);
-    }
-
-    /**
      * Gets an element from the cache.
      *
      * @param key
