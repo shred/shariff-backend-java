@@ -4,10 +4,7 @@
 
 ![Shariff Logo © 2014 Heise Zeitschriften Verlag](http://www.heise.de/icons/ho/shariff-logo.png)
 
-This document describes the Java backend. The following backends are also available:
-
-* [shariff-backend-php](https://github.com/heiseonline/shariff-backend-php)
-* [shariff-backend-perl](https://github.com/heiseonline/shariff-backend-perl)
+This document describes the Java backend. It is some kind of a port of the [offical Shariff PHP backend](https://github.com/heiseonline/shariff-backend-php).
 
 This Shariff backend is not a part of the official backends by Heise Online!
 
