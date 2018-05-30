@@ -26,7 +26,6 @@ import org.shredzone.shariff.api.Target;
 import org.shredzone.shariff.target.AddThis;
 import org.shredzone.shariff.target.Facebook;
 import org.shredzone.shariff.target.Flattr;
-import org.shredzone.shariff.target.GooglePlus;
 import org.shredzone.shariff.target.LinkedIn;
 import org.shredzone.shariff.target.Pinterest;
 import org.shredzone.shariff.target.Reddit;
@@ -51,7 +50,6 @@ public class BackendTest {
                 instanceOf(AddThis.class),
                 instanceOf(Facebook.class),
                 instanceOf(Flattr.class),
-                instanceOf(GooglePlus.class),
                 instanceOf(LinkedIn.class),
                 instanceOf(Pinterest.class),
                 instanceOf(Reddit.class),
@@ -81,7 +79,7 @@ public class BackendTest {
             protected List<Target> createTargets() {
                 return Arrays.<Target>asList(
                         new TestTarget("facebook", 10),
-                        new TestTarget("googleplus", 20),
+                        new TestTarget("reddit", 20),
                         new TestTarget("flattr", 30)
                 );
             }
@@ -91,7 +89,7 @@ public class BackendTest {
 
         assertThat(counts.size(), is(3));
         assertThat(counts.get("facebook"), is(10));
-        assertThat(counts.get("googleplus"), is(20));
+        assertThat(counts.get("reddit"), is(20));
         assertThat(counts.get("flattr"), is(30));
     }
 

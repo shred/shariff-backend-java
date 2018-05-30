@@ -29,7 +29,6 @@ import org.shredzone.shariff.api.Target;
 import org.shredzone.shariff.target.AddThis;
 import org.shredzone.shariff.target.Facebook;
 import org.shredzone.shariff.target.Flattr;
-import org.shredzone.shariff.target.GooglePlus;
 import org.shredzone.shariff.target.LinkedIn;
 import org.shredzone.shariff.target.Pinterest;
 import org.shredzone.shariff.target.Reddit;
@@ -103,7 +102,6 @@ public class ShariffBackend {
                 new AddThis(),
                 new Facebook(),
                 new Flattr(),
-                new GooglePlus(),
                 new LinkedIn(),
                 new Pinterest(),
                 new Reddit(),

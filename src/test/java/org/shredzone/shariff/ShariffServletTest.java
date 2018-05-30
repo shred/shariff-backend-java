@@ -49,7 +49,6 @@ public class ShariffServletTest {
                 Map<String, Integer> counts = new TreeMap<>();
                 counts.put("facebook", 123);
                 counts.put("flattr", 456);
-                counts.put("googleplus", 789);
 
                 ShariffBackend backend = mock(ShariffBackend.class);
                 when(backend.getCounts("http://example.com/testpage")).thenReturn(counts);
@@ -112,7 +111,7 @@ public class ShariffServletTest {
         verify(resp).setContentType("application/json");
         verify(resp).setCharacterEncoding("utf-8");
 
-        assertThat(out.toString(), is("{\"facebook\":123,\"flattr\":456,\"googleplus\":789}"));
+        assertThat(out.toString(), is("{\"facebook\":123,\"flattr\":456}"));
     }
 
     @Test
@@ -123,7 +122,7 @@ public class ShariffServletTest {
         when(config.getInitParameter("host")).thenReturn("http://example\\.com");
         when(config.getInitParameter("cacheSize")).thenReturn("50");
         when(config.getInitParameter("cacheTimeToLiveMs")).thenReturn("1000000");
-        when(config.getInitParameter("targets")).thenReturn("facebook,googleplus");
+        when(config.getInitParameter("targets")).thenReturn("facebook,flattr");
         when(config.getInitParameter("threads")).thenReturn("5");
         when(config.getInitParameter("facebook.id")).thenReturn("12345");
         when(config.getInitParameter("facebook.secret")).thenReturn("54321");
@@ -133,7 +132,7 @@ public class ShariffServletTest {
         assertThat(realServlet.hostPattern.pattern(), is("http://example\\.com"));
         assertThat(realServlet.cacheSize, is(50));
         assertThat(realServlet.timeToLiveMs, is(1000000L));
-        assertThat(realServlet.targets, is(arrayContaining("facebook", "googleplus")));
+        assertThat(realServlet.targets, is(arrayContaining("facebook", "flattr")));
         assertThat(realServlet.threads, is(5));
         assertThat(realServlet.fbClientId, is("12345"));
         assertThat(realServlet.fbClientSecret, is("54321"));
