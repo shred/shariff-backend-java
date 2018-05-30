@@ -74,6 +74,17 @@ public class BackendTest {
         ));
     }
 
+    @SuppressWarnings("unchecked")
+    @Test
+    public void getUnknownTargetTest() {
+        ShariffBackend backend = new ShariffBackend(Arrays.asList("facebook", "flattr", "mockr"));
+        Collection<Target> targets = backend.getTargets();
+        assertThat(targets, contains(
+                instanceOf(Facebook.class),
+                instanceOf(Flattr.class)
+        ));
+    }
+
     @Test
     public void getCountsTest() throws IOException {
         ShariffBackend backend = new ShariffBackend() {
