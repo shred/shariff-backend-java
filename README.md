@@ -69,7 +69,10 @@ If the backend runs under `http://example.com/shariff/`, calling the URL `http:/
 You can also invoke `ShariffBackend` directly. Pass in the Facebook credentials via system properties `facebook.id` and `facebook.secret` if necessary. It returns the share counters for the given URLs on the command line:
 
 ```
-java -cp shariff.jar:json.jar -Dfacebook.id=myId -Dfacebook.secret=mySecret org.shredzone.shariff.ShariffBackend http://www.heise.de
+java -cp backend.jar:json.jar:slf4j-api.jar:slf4j-simple.jar \
+  -Dfacebook.id=myAppId -Dfacebook.secret=myAppSecret \
+  org.shredzone.shariff.ShariffBackend \
+  http://www.heise.de
 ```
 
 ## Shariff Servlet
