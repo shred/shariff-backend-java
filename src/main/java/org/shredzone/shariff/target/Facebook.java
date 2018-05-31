@@ -33,8 +33,8 @@ public class Facebook extends JSONTarget {
     private static final String API_VERSION = "v3.0";
     private static final String UTF_8 = "utf-8";
 
-    private String clientId;
-    private String secret;
+    private String appId;
+    private String appSecret;
 
     /**
      * Sets the credentials for retrieving an access token.
@@ -42,20 +42,20 @@ public class Facebook extends JSONTarget {
      * This method must be invoked in order to get an access counter from Facebook. If not
      * set, a zero count will be returned.
      *
-     * @param clientId
-     *            Client ID
-     * @param secret
-     *            Client Secret
+     * @param appId
+     *            App ID
+     * @param appSecret
+     *            App Secret
      */
-    public void setSecret(String clientId, String secret) {
-        this.clientId = clientId;
-        this.secret = secret;
+    public void setSecret(String appId, String appSecret) {
+        this.appId = appId;
+        this.appSecret = appSecret;
     }
 
     @Override
     public int count(String url) throws IOException {
-        if (clientId == null || secret == null) {
-            throw new IllegalStateException("You need to set a clientId and a secret");
+        if (appId == null || appSecret == null) {
+            throw new IllegalStateException("You need to set an app id and an app secret");
         }
         return super.count(url);
     }
@@ -65,8 +65,8 @@ public class Facebook extends JSONTarget {
         URL connectUrl = new URL("https://graph.facebook.com/" + API_VERSION
                         + "/?id=" + URLEncoder.encode(url, UTF_8)
                         + "&fields=engagement"
-                        + "&access_token=" + URLEncoder.encode(clientId, UTF_8)
-                        + "|" + URLEncoder.encode(secret, UTF_8));
+                        + "&access_token=" + URLEncoder.encode(appId, UTF_8)
+                        + '|' + URLEncoder.encode(appSecret, UTF_8));
         return openConnection(connectUrl);
     }
 

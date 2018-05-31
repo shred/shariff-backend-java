@@ -53,8 +53,8 @@ The following configuration options are available:
 | `cacheTimeToLiveMs` | Maximum time urls are cached, in ms. Default is 1 minute. |
 | `targets`   | List of services to be enabled (see [Features](#features)). Case sensitive. Services must be separated by comma. Default is all available services. |
 | `threads`   | Number of fetcher threads. Defaults to number of active targets. |
-| `facebook.id` | The ID of your Facebook application. |
-| `facebook.secret` | The client secret of your Facebook application. |
+| `facebook.id` | The app ID of your Facebook application. |
+| `facebook.secret` | The app secret of your Facebook application. |
 
 Note that you _must_ set up `facebook.id` and `facebook.secret` to retrieve a valid Facebook share counter. Facebook does not offer an anonymous way any more, at least none I am aware of.
 
