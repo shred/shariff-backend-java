@@ -30,7 +30,7 @@ import org.shredzone.shariff.api.TargetName;
 @TargetName("facebook")
 public class Facebook extends JSONTarget {
 
-    private static final String API_VERSION = "v3.0";
+    private static final String API_VERSION = "v3.1";
     private static final String UTF_8 = "utf-8";
 
     private String appId;
