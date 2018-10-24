@@ -29,7 +29,6 @@ public abstract class HttpTarget implements Target {
 
     private static final int HTTP_TIMEOUT_MS = 10000;
     private static final String BACKEND_VERSION;
-    public static String organisation;
 
     static {
         StringBuilder version = new StringBuilder("shariff-backend-java");
@@ -45,6 +44,8 @@ public abstract class HttpTarget implements Target {
         BACKEND_VERSION = version.toString();
     }
 
+    private String userAgent = BACKEND_VERSION;
+
     @Override
     public int count(String url) throws IOException {
         HttpURLConnection connection = connect(url);
@@ -57,6 +58,15 @@ public abstract class HttpTarget implements Target {
             return extractCount(in);
         } finally {
             connection.disconnect();
+        }
+    }
+
+    @Override
+    public void setOrganisation(String organisation) {
+        if (organisation != null) {
+            userAgent = BACKEND_VERSION + " (" + organisation + ")";
+        } else {
+            userAgent = BACKEND_VERSION;
         }
     }
 
@@ -104,15 +114,8 @@ public abstract class HttpTarget implements Target {
         connection.setUseCaches(false);
         connection.setConnectTimeout(HTTP_TIMEOUT_MS);
         connection.setReadTimeout(HTTP_TIMEOUT_MS);
-        connection.setRequestProperty("User-Agent", getUserAgent());
+        connection.setRequestProperty("User-Agent", userAgent);
         return connection;
     }
 
-    private String getUserAgent() {
-        String userAgent = BACKEND_VERSION;
-        if (organisation != null) {
-            userAgent += " (" + organisation + ")";
-        }
-        return userAgent;
-    }
 }

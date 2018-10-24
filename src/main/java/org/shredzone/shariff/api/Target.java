@@ -45,4 +45,12 @@ public interface Target {
      */
     int count(String url) throws IOException;
 
+    /**
+     * Sets an optional organisation name that is attached to the User-Agent header.
+     *
+     * @param organisation
+     *            Organisation name, or {@code null} if unset
+     */
+    void setOrganisation(String organisation);
+
 }

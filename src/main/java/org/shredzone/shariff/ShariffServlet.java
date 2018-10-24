@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
-import org.shredzone.shariff.api.HttpTarget;
 import org.shredzone.shariff.target.Facebook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +51,7 @@ public class ShariffServlet extends HttpServlet {
     protected Integer threads = null;
     protected String fbClientId;
     protected String fbClientSecret;
+    protected String organisation;
 
     /**
      * Generates a {@link ShariffBackend}.
@@ -66,6 +66,10 @@ public class ShariffServlet extends HttpServlet {
         Facebook fb = instance.getTarget(Facebook.class);
         if (fb != null && fbClientId != null && fbClientSecret != null) {
             fb.setSecret(fbClientId, fbClientSecret);
+        }
+
+        if (organisation != null) {
+            instance.getTargets().forEach(it -> it.setOrganisation(organisation));
         }
 
         return instance;
@@ -206,10 +210,7 @@ public class ShariffServlet extends HttpServlet {
         fbClientId = config.getInitParameter("facebook.id");
         fbClientSecret = config.getInitParameter("facebook.secret");
 
-        String organisation = config.getInitParameter("organisation");
-        if (organisation != null) {
-            HttpTarget.organisation = organisation;
-        }
+        organisation = config.getInitParameter("organisation");
     }
 
     @Override

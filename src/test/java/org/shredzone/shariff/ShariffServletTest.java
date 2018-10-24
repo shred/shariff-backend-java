@@ -126,6 +126,7 @@ public class ShariffServletTest {
         when(config.getInitParameter("threads")).thenReturn("5");
         when(config.getInitParameter("facebook.id")).thenReturn("12345");
         when(config.getInitParameter("facebook.secret")).thenReturn("54321");
+        when(config.getInitParameter("organisation")).thenReturn("acme corp");
 
         realServlet.init(config);
 
@@ -136,6 +137,7 @@ public class ShariffServletTest {
         assertThat(realServlet.threads, is(5));
         assertThat(realServlet.fbClientId, is("12345"));
         assertThat(realServlet.fbClientSecret, is("54321"));
+        assertThat(realServlet.organisation, is("acme corp"));
 
         ShariffBackend backend = realServlet.createBackend();
         assertThat(backend.getTargets().size(), is(2));
