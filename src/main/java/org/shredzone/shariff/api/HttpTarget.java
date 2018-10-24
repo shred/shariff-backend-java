@@ -28,21 +28,21 @@ import java.util.Properties;
 public abstract class HttpTarget implements Target {
 
     private static final int HTTP_TIMEOUT_MS = 10000;
-    private static final String USER_AGENT;
+    private static final String BACKEND_VERSION;
+    public static String organisation;
 
     static {
-        StringBuilder agent = new StringBuilder("shariff-backend-java");
+        StringBuilder version = new StringBuilder("shariff-backend-java");
         try {
             Properties prop = new Properties();
             prop.load(HttpTarget.class.getResourceAsStream("/org/shredzone/shariff/version.properties"));
-            agent.append('/').append(prop.getProperty("version"));
+            version.append('/').append(prop.getProperty("version"));
         } catch (IOException ex) {
             throw new UncheckedIOException(ex);
         }
 
-        agent.append(" Java/").append(System.getProperty("java.version"));
-
-        USER_AGENT = agent.toString();
+        version.append(" Java/").append(System.getProperty("java.version"));
+        BACKEND_VERSION = version.toString();
     }
 
     @Override
@@ -104,8 +104,15 @@ public abstract class HttpTarget implements Target {
         connection.setUseCaches(false);
         connection.setConnectTimeout(HTTP_TIMEOUT_MS);
         connection.setReadTimeout(HTTP_TIMEOUT_MS);
-        connection.setRequestProperty("User-Agent", USER_AGENT);
+        connection.setRequestProperty("User-Agent", getUserAgent());
         return connection;
     }
 
+    private String getUserAgent() {
+        String userAgent = BACKEND_VERSION;
+        if (organisation != null) {
+            userAgent += " (" + organisation + ")";
+        }
+        return userAgent;
+    }
 }

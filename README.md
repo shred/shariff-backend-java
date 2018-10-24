@@ -55,6 +55,7 @@ The following configuration options are available:
 | `threads`   | Number of fetcher threads. Defaults to number of active targets. |
 | `facebook.id` | The app ID of your Facebook application. |
 | `facebook.secret` | The app secret of your Facebook application. |
+| `organisation` | When set, your organisation will appear in the user agent of any request which is made by the shariff backend |
 
 Note that you _must_ set up `facebook.id` and `facebook.secret` to retrieve a valid Facebook share counter. Facebook does not offer an anonymous way any more, at least none I am aware of.
 
