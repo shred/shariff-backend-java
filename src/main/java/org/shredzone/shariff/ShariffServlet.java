@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
+import org.shredzone.shariff.api.HttpTarget;
 import org.shredzone.shariff.target.Facebook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +70,10 @@ public class ShariffServlet extends HttpServlet {
         }
 
         if (organisation != null) {
-            instance.getTargets().forEach(it -> it.setOrganisation(organisation));
+            instance.getTargets().stream()
+                    .filter(HttpTarget.class::isInstance)
+                    .map(HttpTarget.class::cast)
+                    .forEach(it -> it.setOrganisation(organisation));
         }
 
         return instance;

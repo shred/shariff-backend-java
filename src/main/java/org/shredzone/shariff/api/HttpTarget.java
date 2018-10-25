@@ -61,7 +61,13 @@ public abstract class HttpTarget implements Target {
         }
     }
 
-    @Override
+    /**
+     * Sets an optional organisation name that is attached to the User-Agent header.
+     *
+     * @param organisation
+     *            Organisation name, or {@code null} if unset
+     * @since 1.7
+     */
     public void setOrganisation(String organisation) {
         if (organisation != null) {
             userAgent = BACKEND_VERSION + " (" + organisation + ")";
@@ -114,8 +120,17 @@ public abstract class HttpTarget implements Target {
         connection.setUseCaches(false);
         connection.setConnectTimeout(HTTP_TIMEOUT_MS);
         connection.setReadTimeout(HTTP_TIMEOUT_MS);
-        connection.setRequestProperty("User-Agent", userAgent);
+        connection.setRequestProperty("User-Agent", getUserAgent());
         return connection;
+    }
+
+    /**
+     * Returns the User-Agent to be used for HTTP connections.
+     *
+     * @since 1.7
+     */
+    protected String getUserAgent() {
+        return userAgent;
     }
 
 }

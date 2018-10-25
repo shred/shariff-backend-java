@@ -65,6 +65,16 @@ public class HttpTargetTest {
         target.count(TEST_URL);
     }
 
+    @Test
+    public void userAgentTest() throws IOException {
+        TestTarget target = new TestTarget();
+        assertThat(target.getUserAgent(), containsString("shariff-backend-java"));
+        assertThat(target.getUserAgent(), not(containsString("(")));
+
+        target.setOrganisation("acme corp");
+        assertThat(target.getUserAgent(), containsString(" (acme corp)"));
+    }
+
     @TargetName(TEST_NAME)
     @TargetUrl("http://example.com/api/count?q={}")
     public class TestTarget extends HttpTarget {

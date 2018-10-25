@@ -128,11 +128,6 @@ public class BackendTest {
             assertThat(url, is(TEST_URL));
             return count;
         }
-
-        @Override
-        public void setOrganisation(String organisation) {
-            // ignored
-        }
     }
 
 }
