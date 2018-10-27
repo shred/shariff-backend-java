@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 @TargetName("facebook")
 public class Facebook extends JSONTarget {
 
-    private static final String API_VERSION = "v3.1";
+    private static final String API_VERSION = "v3.2";
     private static final String UTF_8 = "utf-8";
 
     private final Logger log = LoggerFactory.getLogger(getClass());
