@@ -122,6 +122,7 @@ public class ShariffServletTest {
         when(config.getInitParameter("host")).thenReturn("http://example\\.com");
         when(config.getInitParameter("cache.size")).thenReturn("50");
         when(config.getInitParameter("cache.timeToLiveMs")).thenReturn("1000000");
+        when(config.getInitParameter("cache.useOnError")).thenReturn("true");
         when(config.getInitParameter("targets")).thenReturn("facebook,flattr");
         when(config.getInitParameter("threads")).thenReturn("5");
         when(config.getInitParameter("facebook.id")).thenReturn("12345");
@@ -133,6 +134,7 @@ public class ShariffServletTest {
         assertThat(realServlet.hostPattern.pattern(), is("http://example\\.com"));
         assertThat(realServlet.cacheSize, is(50));
         assertThat(realServlet.timeToLiveMs, is(1000000L));
+        assertThat(realServlet.useCacheOnError, is(true));
         assertThat(realServlet.targets, is(arrayContaining("facebook", "flattr")));
         assertThat(realServlet.threads, is(5));
         assertThat(realServlet.fbClientId, is("12345"));

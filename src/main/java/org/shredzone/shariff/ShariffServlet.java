@@ -53,6 +53,7 @@ public class ShariffServlet extends HttpServlet {
     protected String fbClientId;
     protected String fbClientSecret;
     protected String organisation;
+    protected boolean useCacheOnError;
 
     /**
      * Generates a {@link ShariffBackend}.
@@ -105,7 +106,7 @@ public class ShariffServlet extends HttpServlet {
      *            URL to get the counters of
      * @return Map of counters
      */
-    protected Map<String, Integer> getCounts(String url) throws IOException {
+    protected Map<String, Integer> getCounts(String url) {
         return getBackend().getCounts(url);
     }
 
@@ -119,20 +120,34 @@ public class ShariffServlet extends HttpServlet {
      *            URL to get the counters of
      * @return Map of counters
      */
-    protected Map<String, Integer> getCountsCached(String url) throws IOException {
+    protected Map<String, Integer> getCountsCached(String url) {
         synchronized (this) {
             if (cache == null) {
                 cache = new SimpleCache<>(cacheSize, timeToLiveMs, TimeUnit.MILLISECONDS);
             }
 
-            Map<String, Integer> result = cache.get(url);
-            if (result == null) {
-                result = getCounts(url);
-                cache.put(url, result);
-            }
-
-            return result;
+            return cache.fetch(url, this::fetchFailSafe);
         }
+    }
+
+    /**
+     * Gets the counters for the given url, and extends missing counters with those from a
+     * previous result.
+     *
+     * @param url
+     *            URL to get the counters of
+     * @param previous
+     *            Previously cached counter values, or {@code null} if not present
+     * @return Map of counters
+     */
+    private Map<String, Integer> fetchFailSafe(String url, Map<String, Integer> previous) {
+        Map<String, Integer> result = getCounts(url);
+
+        if (useCacheOnError && previous != null) {
+            previous.forEach(result::putIfAbsent);
+        }
+
+        return result;
     }
 
     /**
@@ -202,6 +217,11 @@ public class ShariffServlet extends HttpServlet {
         }
         if (ttl != null) {
             timeToLiveMs = Long.parseLong(ttl);
+        }
+
+        String coe = config.getInitParameter("cache.useOnError");
+        if (coe != null) {
+            useCacheOnError = Boolean.parseBoolean(coe);
         }
 
         String trg = config.getInitParameter("targets");

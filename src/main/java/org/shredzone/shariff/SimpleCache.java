@@ -15,6 +15,7 @@ package org.shredzone.shariff;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiFunction;
 
 /**
  * A very simple cache. It keeps a maximum number of elements for the given time to live.
@@ -47,6 +48,45 @@ public class SimpleCache<K, V> {
     public SimpleCache(int maxEntries, long timeToLive, TimeUnit unit) {
         cache = new CacheMap<>(maxEntries);
         this.timeToLiveMs = unit.toMillis(timeToLive);
+    }
+
+    /**
+     * Fetches an element from the cache.
+     * <p>
+     * On a cache miss, the {@code provider} function is invoked. It is supposed to fetch
+     * the value, which is cached and returned.
+     * <p>
+     * If there is an expired value still present in the cache, it is passed to the
+     * {@code provider}.
+     *
+     * @param key
+     *            Cache key
+     * @param provider
+     *            A {@link BiFunction} that is used to fetch the value on cache miss. One
+     *            parameter is the cache key. The other parameter is the previous (and
+     *            expired) value present in this cache, or {@code null} if there was no
+     *            previous value.
+     * @return Value, or {@code null} if there was no such element
+     * @since 1.7
+     */
+    public V fetch(K key, BiFunction<K, V, V> provider) {
+        Entry<V> entry = cache.get(key);
+
+        // Cache hit: return cached value
+        if (entry != null && !isExpired(entry.expiry)) {
+            return entry.value;
+        }
+
+        // Cache miss: fetch new value
+        V newValue = provider.apply(key, entry != null ? entry.value : null);
+        if (newValue != null) {
+            put(key, newValue);
+            return newValue;
+        } else {
+            cache.remove(key);
+        }
+
+        return null;
     }
 
     /**

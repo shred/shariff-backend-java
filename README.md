@@ -51,6 +51,7 @@ The following configuration options are available:
 | `host `     | Regular expression of acceptable hosts (e.g. "^(.*\\.)?example\\.com$"). If unset, only the host of the servlet is accepted. It's recommended to keep foreign websites from using your Shariff server. |
 | `cache.size` | Maximum number of urls to be cached in memory. Default is 1000. |
 | `cache.timeToLiveMs` | Maximum time urls are cached, in ms. Default is 1 minute. |
+| `cache.useOnError` | If `true`, a cached counter is reused if the current counter could not be fetched (e.g. because of a rate limit). This way, the cache time to live could be considerably exceeded for individual counters. Default is `false`. |
 | `targets`   | List of services to be enabled (see [Features](#features)). Case sensitive. Services must be separated by comma. Default is all available services. |
 | `threads`   | Number of fetcher threads. Defaults to number of active targets. |
 | `facebook.id` | The app ID of your Facebook application. |

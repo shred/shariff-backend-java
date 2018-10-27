@@ -82,6 +82,38 @@ public class SimpleCacheTest {
     }
 
     @Test
+    public void fetchTest() {
+        AtomicBoolean expired = new AtomicBoolean(false);
+
+        SimpleCache<Integer, String> cache = new SimpleCache<Integer, String>(10, 5, TimeUnit.SECONDS) {
+            @Override
+            protected boolean isExpired(long expiry) {
+                return expired.get();
+            }
+        };
+
+        // Fill with 10 entries
+        for (int ix = 0; ix < 10; ix++) {
+            cache.put(ix, String.valueOf(ix));
+        }
+
+        // Now expire all records
+        expired.set(true);
+
+        // Fetch entries
+        for (int ix = 0; ix < 10; ix++) {
+            String result = cache.fetch(ix, (key, prev) ->
+                key % 2 == 0 ? String.valueOf(key) + " new" : prev + " old");
+
+            if (ix % 2 == 0) {
+                assertThat(result, is(String.valueOf(ix) + " new"));
+            } else {
+                assertThat(result, is(String.valueOf(ix) + " old"));
+            }
+        }
+    }
+
+    @Test
     public void expireTest() {
         SimpleCache<Integer, Object> cache = new SimpleCache<>(10, 5, TimeUnit.SECONDS);
 
