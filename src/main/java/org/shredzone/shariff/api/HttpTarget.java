@@ -20,6 +20,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Properties;
 
+import org.shredzone.shariff.RateLimitExceededException;
+
 /**
  * A base {@link Target} implementation that performs HTTP requests.
  *
@@ -49,15 +51,30 @@ public abstract class HttpTarget implements Target {
     @Override
     public int count(String url) throws IOException {
         HttpURLConnection connection = connect(url);
-
-        if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-            throw new IOException("HTTP " + connection.getResponseCode() + ": " + connection.getResponseMessage());
-        }
-
-        try (InputStream in = connection.getInputStream()) {
-            return extractCount(in);
+        try {
+            checkResponse(connection);
+            try (InputStream in = connection.getInputStream()) {
+                return extractCount(in);
+            }
         } finally {
             connection.disconnect();
+        }
+    }
+
+    /**
+     * Checks if the {@link HttpURLConnection} contains a valid response.
+     *
+     * @param connection
+     *            {@link HttpURLConnection} to check
+     * @throws IOException
+     *             if the response was invalid
+     * @throws RateLimitExceededException
+     *             if the response shows that a rate limit has been exceeded
+     * @since 1.7
+     */
+    protected void checkResponse(HttpURLConnection connection) throws IOException {
+        if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+            throw new IOException("HTTP " + connection.getResponseCode() + ": " + connection.getResponseMessage());
         }
     }
 

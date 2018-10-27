@@ -16,11 +16,16 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Iterator;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.shredzone.shariff.RateLimitExceededException;
 import org.shredzone.shariff.api.JSONTarget;
 import org.shredzone.shariff.api.TargetName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Facebook target.
@@ -32,6 +37,8 @@ public class Facebook extends JSONTarget {
 
     private static final String API_VERSION = "v3.1";
     private static final String UTF_8 = "utf-8";
+
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     private String appId;
     private String appSecret;
@@ -71,6 +78,16 @@ public class Facebook extends JSONTarget {
     }
 
     @Override
+    protected void checkResponse(HttpURLConnection connection) throws IOException {
+        String usage = connection.getHeaderField("X-App-Usage");
+        if (usage != null) {
+            checkAppUsageHeader(usage);
+        }
+
+        super.checkResponse(connection);
+    }
+
+    @Override
     protected int extractCount(JSONTokener json) {
         JSONObject jo = (JSONObject) json.nextValue();
         if (jo.has("engagement")) {
@@ -80,6 +97,32 @@ public class Facebook extends JSONTarget {
                     + eo.optInt("share_count");
         } else {
             return 0;
+        }
+    }
+
+    /**
+     * Parses the X-App-Usage header and throws an exception if a rate limit has been
+     * exceeded.
+     *
+     * @param header
+     *            X-App-Usage header to be checked
+     * @throws RateLimitExceededException
+     *             if one of the values in that header exceeds 100%.
+     */
+    protected void checkAppUsageHeader(String header) throws RateLimitExceededException {
+        try {
+            JSONTokener tokener = new JSONTokener(header);
+            JSONObject jo = (JSONObject) tokener.nextValue();
+            Iterator<String> keys = jo.keys();
+            while (keys.hasNext()) {
+                String key = keys.next();
+                int val = jo.getInt(key);
+                if (val > 100) {
+                    throw new RateLimitExceededException(key + " = " + val + '%');
+                }
+            }
+        } catch (JSONException | ClassCastException ex) {
+            log.warn("Could not parse X-App-Usage header: '{}'", header, ex);
         }
     }
 

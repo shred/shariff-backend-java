@@ -23,6 +23,7 @@ import java.net.URLEncoder;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.shredzone.shariff.RateLimitExceededException;
 
 /**
  * Unit tests for {@link Facebook}.
@@ -71,6 +72,24 @@ public class FacebookTest {
     @Test(expected = IllegalStateException.class)
     public void anonymousCounterTest() throws IOException {
         target.count(TEST_URL);
+    }
+
+    @Test
+    public void rateLimitNotExceededTest() throws IOException {
+        target.checkAppUsageHeader("{\"call_count\":98,\"total_time\":24,\"total_cputime\":100}");
+    }
+
+    @Test(expected = RateLimitExceededException.class)
+    public void rateLimitExceededTest() throws IOException {
+        target.checkAppUsageHeader("{\"call_count\":98,\"total_time\":24,\"total_cputime\":104}");
+    }
+
+    @Test
+    public void badRateLimitHeaderTest() throws IOException {
+        target.checkAppUsageHeader("{}");
+        target.checkAppUsageHeader("[123, 45]");
+        target.checkAppUsageHeader("{\"call_count\":\"foo\"}");
+        target.checkAppUsageHeader("not-json");
     }
 
 }
