@@ -188,12 +188,18 @@ public class ShariffServlet extends HttpServlet {
             hostPattern = Pattern.compile(hosts, Pattern.CASE_INSENSITIVE);
         }
 
-        String cs = config.getInitParameter("cacheSize");
+        String cs = config.getInitParameter("cache.size");
+        if (cs == null) {
+            cs = config.getInitParameter("cacheSize"); // @Deprecated
+        }
         if (cs != null) {
             cacheSize = Integer.parseInt(cs);
         }
 
-        String ttl = config.getInitParameter("cacheTimeToLiveMs");
+        String ttl = config.getInitParameter("cache.timeToLiveMs");
+        if (ttl == null) {
+            ttl = config.getInitParameter("cacheTimeToLiveMs"); // @Deprecated
+        }
         if (ttl != null) {
             timeToLiveMs = Long.parseLong(ttl);
         }

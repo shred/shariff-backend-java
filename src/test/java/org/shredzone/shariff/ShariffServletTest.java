@@ -120,8 +120,8 @@ public class ShariffServletTest {
 
         ServletConfig config = mock(ServletConfig.class);
         when(config.getInitParameter("host")).thenReturn("http://example\\.com");
-        when(config.getInitParameter("cacheSize")).thenReturn("50");
-        when(config.getInitParameter("cacheTimeToLiveMs")).thenReturn("1000000");
+        when(config.getInitParameter("cache.size")).thenReturn("50");
+        when(config.getInitParameter("cache.timeToLiveMs")).thenReturn("1000000");
         when(config.getInitParameter("targets")).thenReturn("facebook,flattr");
         when(config.getInitParameter("threads")).thenReturn("5");
         when(config.getInitParameter("facebook.id")).thenReturn("12345");
