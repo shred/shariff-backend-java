@@ -66,6 +66,21 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.7</version>
+                <configuration>
+                    <outputEncoding>UTF-8</outputEncoding>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.doxia</groupId>
+                        <artifactId>doxia-module-markdown</artifactId>
+                        <version>1.8</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
                 <version>2.5</version>
                 <configuration>
@@ -82,15 +97,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.7</version>
+                <version>3.0.0</version>
                 <reportSets>
                     <reportSet>
                         <reports>
-                            <report>dependencies</report>
-                            <report>license</report>
                             <report>summary</report>
-                            <report>project-team</report>
+                            <report>dependency-info</report>
                             <report>scm</report>
+                            <report>issue-management</report>
+                            <report>dependencies</report>
+                            <report>team</report>
+                            <report>licenses</report>
                         </reports>
                     </reportSet>
                 </reportSets>
@@ -98,12 +115,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>2.17</version>
+                <version>2.22.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
+                <version>3.0.1</version>
                 <configuration>
                     <links>
                         <link>http://docs.oracle.com/javase/8/docs/api/</link>
@@ -111,6 +128,7 @@
                     </links>
                     <charset>UTF-8</charset>
                     <linksource>true</linksource>
+                    <additionalparam>-Xdoclint:syntax,reference</additionalparam>
                 </configuration>
             </plugin>
         </plugins>
