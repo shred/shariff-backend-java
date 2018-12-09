@@ -24,7 +24,7 @@ import org.shredzone.shariff.api.TargetUrl;
  * @author Richard "Shred" Körber
  */
 @TargetName("pinterest")
-@TargetUrl("http://api.pinterest.com/v1/urls/count.json?callback=x&url={}")
+@TargetUrl("https://api.pinterest.com/v1/urls/count.json?callback=x&url={}")
 public class Pinterest extends JSONTarget {
 
     @Override
