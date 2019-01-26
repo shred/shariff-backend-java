@@ -93,8 +93,8 @@ public class ShariffServlet extends HttpServlet {
             if (backend == null) {
                 backend = createBackend();
             }
+            return backend;
         }
-        return backend;
     }
 
     /**

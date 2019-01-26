@@ -12,6 +12,8 @@
  */
 package org.shredzone.shariff.target;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,7 +39,7 @@ public class Vk extends HttpTarget {
 
     @Override
     protected int extractCount(InputStream in) throws IOException {
-        BufferedReader r = new BufferedReader(new InputStreamReader(in));
+        BufferedReader r = new BufferedReader(new InputStreamReader(in, UTF_8));
         String line = r.readLine();
         Matcher m = COUNTER.matcher(line);
         if (!m.matches()) {

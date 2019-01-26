@@ -34,9 +34,9 @@ public abstract class HttpTarget implements Target {
 
     static {
         StringBuilder version = new StringBuilder("shariff-backend-java");
-        try {
+        try (InputStream in = HttpTarget.class.getResourceAsStream("/org/shredzone/shariff/version.properties")){
             Properties prop = new Properties();
-            prop.load(HttpTarget.class.getResourceAsStream("/org/shredzone/shariff/version.properties"));
+            prop.load(in);
             version.append('/').append(prop.getProperty("version"));
         } catch (IOException ex) {
             throw new UncheckedIOException(ex);
