@@ -18,7 +18,7 @@ This Shariff backend is not a part of the official backends by Heise Online!
 
 ## Installing the Shariff backend on your own server
 
-Just add Shariff (`org.shredzone.shariff:backend:1.4`) to your maven or gradle dependencies, or copy the `shariff.jar`, [`json.jar`](https://mvnrepository.com/artifact/org.json/json) and [`slf4j`](https://www.slf4j.org/download.html) files to your project's lib folder. Then add the Shariff servlet to your `web.xml`:
+Just add Shariff (`org.shredzone.shariff:backend:1.4`) to your maven or gradle dependencies, or copy the `shariff.jar`, [`json.jar`](https://mvnrepository.com/artifact/org.json/json) and [`slf4j`](https://www.slf4j.org/download.html) files to your project's lib folder. Add `org.shredzone.shariff` to your Java module dependencies. Then add the Shariff servlet to your `web.xml`:
 
 ```xml
 <servlet>
