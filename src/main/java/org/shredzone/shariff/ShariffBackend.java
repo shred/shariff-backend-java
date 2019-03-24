@@ -27,6 +27,7 @@ import java.util.concurrent.Future;
 
 import org.shredzone.shariff.api.Target;
 import org.shredzone.shariff.target.AddThis;
+import org.shredzone.shariff.target.Buffer;
 import org.shredzone.shariff.target.Facebook;
 import org.shredzone.shariff.target.Flattr;
 import org.shredzone.shariff.target.LinkedIn;
@@ -101,6 +102,7 @@ public class ShariffBackend {
     protected List<Target> createTargets() {
         return Arrays.<Target>asList(
                 new AddThis(),
+                new Buffer(),
                 new Facebook(),
                 new Flattr(),
                 new LinkedIn(),
