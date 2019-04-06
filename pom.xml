@@ -214,6 +214,7 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <configuration>
+                            <source>8</source>
                             <additionalJOption combine.self="override">--no-module-directories</additionalJOption>
                         </configuration>
                     </plugin>
