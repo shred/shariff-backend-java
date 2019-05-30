@@ -83,6 +83,17 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <detectLinks>true</detectLinks>
+                    <doclint>syntax,reference</doclint>
+                    <linksource>true</linksource>
+                    <locale>en</locale>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.7.1</version>
                 <configuration>
@@ -201,6 +212,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
     <!-- Workaround: Java 9's javadoc search is broken if no module is defined -->
     <profiles>
         <profile>
@@ -208,6 +220,17 @@
             <activation>
                 <jdk>[9,)</jdk>
             </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <configuration>
+                            <source>8</source>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
             <reporting>
                 <plugins>
                     <plugin>
@@ -215,7 +238,6 @@
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <configuration>
                             <source>8</source>
-                            <additionalJOption combine.self="override">--no-module-directories</additionalJOption>
                         </configuration>
                     </plugin>
                 </plugins>
