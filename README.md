@@ -9,7 +9,7 @@ This Shariff backend is not a part of the official backends by Heise Online!
 ## Features
 
 * Easy to use Java servlet
-* Supports `addthis`, `buffer`, `facebook`, `flattr`, `linkedin`, `pinterest`, `reddit`, `stumbleupon`, `vk`, `xing`
+* Supports `addthis`, `buffer`, `facebook`, `flattr`, `pinterest`, `reddit`, `stumbleupon`, `vk`, `xing`
 * Parallel counter fetching to minimize response time
 * Comes with a simple caching mechanism that can be replaced by other cache solutions like [Ehcache](http://ehcache.org)
 * Built with maven, package is available at Maven Central

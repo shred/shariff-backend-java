@@ -30,7 +30,6 @@ import org.shredzone.shariff.target.AddThis;
 import org.shredzone.shariff.target.Buffer;
 import org.shredzone.shariff.target.Facebook;
 import org.shredzone.shariff.target.Flattr;
-import org.shredzone.shariff.target.LinkedIn;
 import org.shredzone.shariff.target.Pinterest;
 import org.shredzone.shariff.target.Reddit;
 import org.shredzone.shariff.target.StumbleUpon;
@@ -105,7 +104,6 @@ public class ShariffBackend {
                 new Buffer(),
                 new Facebook(),
                 new Flattr(),
-                new LinkedIn(),
                 new Pinterest(),
                 new Reddit(),
                 new StumbleUpon(),
