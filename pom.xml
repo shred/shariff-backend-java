@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.shredzone.shariff</groupId>
     <artifactId>backend</artifactId>
-    <version>1.13</version>
+    <version>1.14-SNAPSHOT</version>
     <name>Shariff Java Backend</name>
     <description>Java Backend for Heise Shariff</description>
     <url>http://github.com/shred/shariff-backend-java</url>
@@ -18,7 +18,7 @@
         <url>scm:git:git@github.com:shred/shariff-backend-java.git</url>
         <connection>scm:git:git@github.com:shred/shariff-backend-java.git</connection>
         <developerConnection>scm:git:git@github.com:shred/shariff-backend-java.git</developerConnection>
-        <tag>v1.13</tag>
+        <tag>HEAD</tag>
     </scm>
     <developers>
         <developer>
