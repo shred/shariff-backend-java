@@ -71,7 +71,7 @@ public class Facebook extends JSONTarget {
     protected HttpURLConnection connect(String url) throws IOException {
         URL connectUrl = new URL("https://graph.facebook.com/" + API_VERSION
                         + "/?id=" + URLEncoder.encode(url, UTF_8)
-                        + "&fields=engagement"
+                        + "&fields=og_object%7Bengagement%7D"
                         + "&access_token=" + URLEncoder.encode(appId, UTF_8)
                         + '|' + URLEncoder.encode(appSecret, UTF_8));
         return openConnection(connectUrl);
@@ -90,14 +90,14 @@ public class Facebook extends JSONTarget {
     @Override
     protected int extractCount(JSONTokener json) {
         JSONObject jo = (JSONObject) json.nextValue();
-        if (jo.has("engagement")) {
-            JSONObject eo = jo.getJSONObject("engagement");
-            return eo.optInt("reaction_count")
-                    + eo.optInt("comment_count")
-                    + eo.optInt("share_count");
-        } else {
-            return 0;
+        if (jo.has("og_object")) {
+            JSONObject og = jo.getJSONObject("og_object");
+            if (og.has("engagement")) {
+                JSONObject eo = og.getJSONObject("engagement");
+                return eo.optInt("count");
+            }
         }
+        return 0;
     }
 
     /**

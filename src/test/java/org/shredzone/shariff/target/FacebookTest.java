@@ -36,7 +36,7 @@ public class FacebookTest {
     private static final String TEST_URL = "http://www.heise.de";
     private static final String CLIENT_ID = "fbclient";
     private static final String CLIENT_SECRET = "sekrit";
-    private static final int SHARE_COUNT = 9013;
+    private static final int SHARE_COUNT = 9450;
 
     private Facebook target;
 
@@ -47,7 +47,7 @@ public class FacebookTest {
             protected HttpURLConnection openConnection(URL url) throws IOException {
                 assertThat(url.toExternalForm(), is("https://graph.facebook.com/v10.0"
                             + "/?id=" + URLEncoder.encode(TEST_URL, "utf-8")
-                            + "&fields=engagement"
+                            + "&fields=og_object%7Bengagement%7D"
                             + "&access_token=" + CLIENT_ID + "|" + CLIENT_SECRET));
 
                 HttpURLConnection connection = mock(HttpURLConnection.class);

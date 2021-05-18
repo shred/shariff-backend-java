@@ -1,9 +1,10 @@
 {
-  "engagement": {
-    "reaction_count": 1780,
-    "comment_count": 1229,
-    "share_count": 6004,
-    "comment_plugin_count": 0
+  "og_object": {
+    "engagement": {
+      "count": 9450,
+      "social_sentence": "9.450 Personen gef\u00e4llt das."
+    },
+    "id": "331776430263909"
   },
   "id": "http://www.heise.de"
 }
