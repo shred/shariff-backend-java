@@ -12,9 +12,9 @@
  */
 package org.shredzone.shariff;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.arrayContaining;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 
 import java.io.IOException;
@@ -58,7 +58,7 @@ public class ShariffServletTest {
     }
 
     @Test
-    public void noUrlTest() throws ServletException, IOException {
+    public void noUrlTest() throws IOException {
         HttpServletRequest req = mock(HttpServletRequest.class);
         when(req.getParameter("url")).thenReturn(null);
 
@@ -70,7 +70,7 @@ public class ShariffServletTest {
     }
 
     @Test
-    public void invalidUrlTest() throws ServletException, IOException {
+    public void invalidUrlTest() throws IOException {
         HttpServletRequest req = mock(HttpServletRequest.class);
         when(req.getParameter("url")).thenReturn("#################################");
         when(req.getServerName()).thenReturn("example.com");
@@ -83,7 +83,7 @@ public class ShariffServletTest {
     }
 
     @Test
-    public void invalidHostTest() throws ServletException, IOException {
+    public void invalidHostTest() throws IOException {
         HttpServletRequest req = mock(HttpServletRequest.class);
         when(req.getParameter("url")).thenReturn("http://illegal.com/testpage");
         when(req.getServerName()).thenReturn("example.com");
@@ -96,7 +96,7 @@ public class ShariffServletTest {
     }
 
     @Test
-    public void validTest() throws ServletException, IOException {
+    public void validTest() throws IOException {
         HttpServletRequest req = mock(HttpServletRequest.class);
         when(req.getParameter("url")).thenReturn("http://example.com/testpage");
         when(req.getServerName()).thenReturn("example.com");
@@ -109,13 +109,13 @@ public class ShariffServletTest {
 
         verify(resp, never()).sendError(anyInt(), anyString());
         verify(resp).setContentType("application/json");
-        verify(resp).setCharacterEncoding("utf-8");
+        verify(resp).setCharacterEncoding("UTF-8");
 
         assertThat(out.toString(), is("{\"facebook\":123,\"flattr\":456}"));
     }
 
     @Test
-    public void initTest() throws ServletException, IOException {
+    public void initTest() throws ServletException {
         ShariffServlet realServlet = new ShariffServlet();
 
         ServletConfig config = mock(ServletConfig.class);

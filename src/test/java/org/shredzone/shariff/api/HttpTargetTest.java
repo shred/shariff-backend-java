@@ -12,8 +12,8 @@
  */
 package org.shredzone.shariff.api;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 import java.io.IOException;
@@ -66,7 +66,7 @@ public class HttpTargetTest {
     }
 
     @Test
-    public void userAgentTest() throws IOException {
+    public void userAgentTest() {
         TestTarget target = new TestTarget();
         assertThat(target.getUserAgent(), containsString("shariff-backend-java"));
         assertThat(target.getUserAgent(), not(containsString("(")));
@@ -79,7 +79,7 @@ public class HttpTargetTest {
     @TargetUrl("http://example.com/api/count?q={}")
     public class TestTarget extends HttpTarget {
         @Override
-        protected HttpURLConnection openConnection(URL url) throws IOException {
+        protected HttpURLConnection openConnection(URL url) {
             assertThat(url.toExternalForm(),
                     is("http://example.com/api/count?"
                         + "q=http%3A%2F%2Fexample.org%2Fshareme.html%3Ffoo%3D1%26bar%3D2"));
@@ -87,7 +87,7 @@ public class HttpTargetTest {
         }
 
         @Override
-        protected int extractCount(InputStream in) throws IOException {
+        protected int extractCount(InputStream in) {
             assertThat(in, sameInstance(mockIn));
             return TEST_COUNT;
         }

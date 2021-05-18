@@ -12,10 +12,9 @@
  */
 package org.shredzone.shariff;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -42,7 +41,6 @@ public class BackendTest {
 
     private static final String TEST_URL = "http://www.heise.de";
 
-    @SuppressWarnings("unchecked")
     @Test
     public void getTargetTest() {
         ShariffBackend backend = new ShariffBackend();
@@ -63,7 +61,6 @@ public class BackendTest {
         assertThat(flattrTarget, is(notNullValue()));
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     public void getTargetByConstructorTest() {
         ShariffBackend backend = new ShariffBackend(Arrays.asList("facebook", "flattr"));
@@ -74,7 +71,6 @@ public class BackendTest {
         ));
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     public void getUnknownTargetTest() {
         ShariffBackend backend = new ShariffBackend(Arrays.asList("facebook", "flattr", "mockr"));
@@ -86,11 +82,11 @@ public class BackendTest {
     }
 
     @Test
-    public void getCountsTest() throws IOException {
+    public void getCountsTest() {
         ShariffBackend backend = new ShariffBackend() {
             @Override
             protected List<Target> createTargets() {
-                return Arrays.<Target>asList(
+                return Arrays.asList(
                         new TestTarget("facebook", 10),
                         new TestTarget("reddit", 20),
                         new TestTarget("flattr", 30)
@@ -124,7 +120,7 @@ public class BackendTest {
         }
 
         @Override
-        public int count(String url) throws IOException {
+        public int count(String url) {
             assertThat(url, is(TEST_URL));
             return count;
         }

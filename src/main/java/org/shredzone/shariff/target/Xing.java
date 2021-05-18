@@ -12,6 +12,8 @@
  */
 package org.shredzone.shariff.target;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -42,10 +44,10 @@ public class Xing extends JSONTarget {
 
         StringBuilder sb = new StringBuilder();
         sb.append("url=");
-        sb.append(URLEncoder.encode(url, "utf-8"));
+        sb.append(URLEncoder.encode(url, UTF_8.name()));
 
         try (OutputStream out = connection.getOutputStream()) {
-            out.write(sb.toString().getBytes("utf-8"));
+            out.write(sb.toString().getBytes(UTF_8));
         }
 
         return connection;

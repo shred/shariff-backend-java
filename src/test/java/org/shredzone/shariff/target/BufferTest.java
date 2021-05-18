@@ -12,8 +12,9 @@
  */
 package org.shredzone.shariff.target;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -46,7 +47,7 @@ public class BufferTest {
 
                 HttpURLConnection connection = mock(HttpURLConnection.class);
                 when(connection.getResponseCode()).thenReturn(HttpURLConnection.HTTP_OK);
-                when(connection.getInputStream()).thenReturn(new ByteArrayInputStream(result.getBytes("utf-8")));
+                when(connection.getInputStream()).thenReturn(new ByteArrayInputStream(result.getBytes(UTF_8)));
                 when(connection.getOutputStream()).thenThrow(new IllegalStateException());
                 return connection;
             }

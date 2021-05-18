@@ -12,8 +12,8 @@
  */
 package org.shredzone.shariff;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -103,12 +103,12 @@ public class SimpleCacheTest {
         // Fetch entries
         for (int ix = 0; ix < 10; ix++) {
             String result = cache.fetch(ix, (key, prev) ->
-                key % 2 == 0 ? String.valueOf(key) + " new" : prev + " old");
+                key % 2 == 0 ? key + " new" : prev + " old");
 
             if (ix % 2 == 0) {
-                assertThat(result, is(String.valueOf(ix) + " new"));
+                assertThat(result, is(ix + " new"));
             } else {
-                assertThat(result, is(String.valueOf(ix) + " old"));
+                assertThat(result, is(ix + " old"));
             }
         }
     }

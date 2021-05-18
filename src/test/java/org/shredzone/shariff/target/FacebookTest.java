@@ -12,8 +12,9 @@
  */
 package org.shredzone.shariff.target;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -46,7 +47,7 @@ public class FacebookTest {
             @Override
             protected HttpURLConnection openConnection(URL url) throws IOException {
                 assertThat(url.toExternalForm(), is("https://graph.facebook.com/v10.0"
-                            + "/?id=" + URLEncoder.encode(TEST_URL, "utf-8")
+                            + "/?id=" + URLEncoder.encode(TEST_URL, UTF_8.name())
                             + "&fields=og_object%7Bengagement%7D"
                             + "&access_token=" + CLIENT_ID + "|" + CLIENT_SECRET));
 

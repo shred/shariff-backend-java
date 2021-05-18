@@ -12,6 +12,8 @@
  */
 package org.shredzone.shariff.target;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -36,7 +38,6 @@ import org.slf4j.LoggerFactory;
 public class Facebook extends JSONTarget {
 
     private static final String API_VERSION = "v10.0";
-    private static final String UTF_8 = "utf-8";
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -70,10 +71,10 @@ public class Facebook extends JSONTarget {
     @Override
     protected HttpURLConnection connect(String url) throws IOException {
         URL connectUrl = new URL("https://graph.facebook.com/" + API_VERSION
-                        + "/?id=" + URLEncoder.encode(url, UTF_8)
+                        + "/?id=" + URLEncoder.encode(url, UTF_8.name())
                         + "&fields=og_object%7Bengagement%7D"
-                        + "&access_token=" + URLEncoder.encode(appId, UTF_8)
-                        + '|' + URLEncoder.encode(appSecret, UTF_8));
+                        + "&access_token=" + URLEncoder.encode(appId, UTF_8.name())
+                        + '|' + URLEncoder.encode(appSecret, UTF_8.name()));
         return openConnection(connectUrl);
     }
 

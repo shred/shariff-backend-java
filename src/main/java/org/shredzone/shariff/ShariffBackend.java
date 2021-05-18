@@ -99,7 +99,7 @@ public class ShariffBackend {
      * Returns a list of known {@link Target} instances.
      */
     protected List<Target> createTargets() {
-        return Arrays.<Target>asList(
+        return Arrays.asList(
                 new AddThis(),
                 new Buffer(),
                 new Facebook(),
@@ -181,7 +181,7 @@ public class ShariffBackend {
             System.out.println(url);
 
             backend.getCounts(url).forEach((key, value) ->
-                    System.out.println(String.format("  %-12s: %d", key, value)));
+                    System.out.printf("  %-12s: %d%n", key, value));
 
             System.out.println();
         }

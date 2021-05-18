@@ -12,7 +12,6 @@
  */
 package org.shredzone.shariff.api;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 import org.json.JSONTokener;
@@ -25,7 +24,7 @@ import org.json.JSONTokener;
 public abstract class JSONTarget extends HttpTarget {
 
     @Override
-    protected int extractCount(InputStream in) throws IOException {
+    protected int extractCount(InputStream in) {
         return extractCount(new JSONTokener(in));
     }
 

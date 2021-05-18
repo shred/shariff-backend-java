@@ -12,6 +12,8 @@
  */
 package org.shredzone.shariff.api;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
@@ -116,7 +118,7 @@ public abstract class HttpTarget implements Target {
      */
     protected HttpURLConnection connect(String url) throws IOException {
         String template = getClass().getAnnotation(TargetUrl.class).value();
-        String connectUrl = template.replace("{}", URLEncoder.encode(url, "utf-8"));
+        String connectUrl = template.replace("{}", URLEncoder.encode(url, UTF_8.name()));
         return openConnection(new URL(connectUrl));
     }
 

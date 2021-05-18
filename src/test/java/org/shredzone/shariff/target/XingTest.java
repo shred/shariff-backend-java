@@ -12,8 +12,9 @@
  */
 package org.shredzone.shariff.target;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 import java.io.ByteArrayInputStream;
@@ -52,7 +53,7 @@ public class XingTest {
 
                 connection = mock(HttpURLConnection.class);
                 when(connection.getResponseCode()).thenReturn(HttpURLConnection.HTTP_OK);
-                when(connection.getInputStream()).thenReturn(new ByteArrayInputStream(result.getBytes("utf-8")));
+                when(connection.getInputStream()).thenReturn(new ByteArrayInputStream(result.getBytes(UTF_8)));
                 when(connection.getOutputStream()).thenReturn(output);
                 return connection;
             }
@@ -71,7 +72,7 @@ public class XingTest {
         verify(connection).setRequestMethod("POST");
         verify(connection).setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
         verify(connection).setDoOutput(true);
-        assertThat(output.toString(), is("url=" + URLEncoder.encode(TEST_URL, "utf-8")));
+        assertThat(output.toString(), is("url=" + URLEncoder.encode(TEST_URL, UTF_8.name())));
     }
 
 }

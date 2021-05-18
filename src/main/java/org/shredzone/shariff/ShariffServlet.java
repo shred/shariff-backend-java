@@ -12,6 +12,8 @@
  */
 package org.shredzone.shariff;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -245,7 +247,7 @@ public class ShariffServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-    throws ServletException, IOException {
+    throws IOException {
         try {
             String url = getUrl(req);
 
@@ -265,7 +267,7 @@ public class ShariffServlet extends HttpServlet {
             }
 
             resp.setContentType("application/json");
-            resp.setCharacterEncoding("utf-8");
+            resp.setCharacterEncoding(UTF_8.name());
             resp.getWriter().append(json.toString());
         } catch (Exception ex) {
             LOG.error("Failed to handle Shariff request", ex);
