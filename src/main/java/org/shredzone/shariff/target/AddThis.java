@@ -24,7 +24,7 @@ import org.shredzone.shariff.api.TargetUrl;
  * @author Richard "Shred" Körber
  */
 @TargetName("addthis")
-@TargetUrl("http://api-public.addthis.com/url/shares.json?url={}")
+@TargetUrl("https://api-public.addthis.com/url/shares.json?url={}")
 public class AddThis extends JSONTarget {
 
     @Override
