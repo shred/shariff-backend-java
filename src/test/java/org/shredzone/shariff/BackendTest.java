@@ -25,7 +25,6 @@ import org.shredzone.shariff.api.Target;
 import org.shredzone.shariff.target.AddThis;
 import org.shredzone.shariff.target.Buffer;
 import org.shredzone.shariff.target.Facebook;
-import org.shredzone.shariff.target.Flattr;
 import org.shredzone.shariff.target.Pinterest;
 import org.shredzone.shariff.target.Reddit;
 import org.shredzone.shariff.target.StumbleUpon;
@@ -49,7 +48,6 @@ public class BackendTest {
                 instanceOf(AddThis.class),
                 instanceOf(Buffer.class),
                 instanceOf(Facebook.class),
-                instanceOf(Flattr.class),
                 instanceOf(Pinterest.class),
                 instanceOf(Reddit.class),
                 instanceOf(StumbleUpon.class),
@@ -57,27 +55,27 @@ public class BackendTest {
                 instanceOf(Xing.class)
         ));
 
-        Flattr flattrTarget = backend.getTarget(Flattr.class);
-        assertThat(flattrTarget, is(notNullValue()));
+        Facebook facebookTarget = backend.getTarget(Facebook.class);
+        assertThat(facebookTarget, is(notNullValue()));
     }
 
     @Test
     public void getTargetByConstructorTest() {
-        ShariffBackend backend = new ShariffBackend(Arrays.asList("facebook", "flattr"));
+        ShariffBackend backend = new ShariffBackend(Arrays.asList("facebook", "reddit"));
         Collection<Target> targets = backend.getTargets();
         assertThat(targets, contains(
                 instanceOf(Facebook.class),
-                instanceOf(Flattr.class)
+                instanceOf(Reddit.class)
         ));
     }
 
     @Test
     public void getUnknownTargetTest() {
-        ShariffBackend backend = new ShariffBackend(Arrays.asList("facebook", "flattr", "mockr"));
+        ShariffBackend backend = new ShariffBackend(Arrays.asList("facebook", "reddit", "mockr"));
         Collection<Target> targets = backend.getTargets();
         assertThat(targets, contains(
                 instanceOf(Facebook.class),
-                instanceOf(Flattr.class)
+                instanceOf(Reddit.class)
         ));
     }
 
@@ -89,7 +87,7 @@ public class BackendTest {
                 return Arrays.asList(
                         new TestTarget("facebook", 10),
                         new TestTarget("reddit", 20),
-                        new TestTarget("flattr", 30)
+                        new TestTarget("xing", 30)
                 );
             }
         };
@@ -99,7 +97,7 @@ public class BackendTest {
         assertThat(counts.size(), is(3));
         assertThat(counts.get("facebook"), is(10));
         assertThat(counts.get("reddit"), is(20));
-        assertThat(counts.get("flattr"), is(30));
+        assertThat(counts.get("xing"), is(30));
     }
 
     /**

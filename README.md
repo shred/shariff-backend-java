@@ -9,7 +9,7 @@ This Shariff backend is not a part of the official backends by Heise Online!
 ## Features
 
 * Easy to use Java servlet
-* Supports `addthis`, `buffer`, `facebook`, `flattr`, `pinterest`, `reddit`, `stumbleupon`, `vk`, `xing`
+* Supports `addthis`, `buffer`, `facebook`, `pinterest`, `reddit`, `stumbleupon`, `vk`, `xing`
 * Parallel counter fetching to minimize response time
 * Comes with a simple caching mechanism that can be replaced by other cache solutions like [Ehcache](http://ehcache.org)
 * Built with maven, package is available at Maven Central
@@ -39,7 +39,7 @@ Use `init-param` to configure the servlet:
     <servlet-class>org.shredzone.shariff.ShariffServlet</servlet-class>
     <init-param>
         <param-name>targets</param-name>
-        <param-value>flattr,facebook</param-value>
+        <param-value>facebook,reddit</param-value>
     </init-param>
 </servlet>
 ```
@@ -67,7 +67,7 @@ The configuration keys `cacheSize` and `cacheTimeToLiveMs` are deprecated since 
 If the backend runs under `http://example.com/shariff/`, calling the URL `http://example.com/shariff/?url=http%3A%2F%2Fwww.example.com` should return a JSON structure with numbers in it, e.g.:
 
 ```json
-{"facebook":1452,"flattr":23}
+{"facebook":1452,"reddit":23}
 ```
 
 You can also invoke `ShariffBackend` directly. Pass in the Facebook credentials via system properties `facebook.id` and `facebook.secret` if necessary. It returns the share counters for the given URLs on the command line:

@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 
 import org.junit.Test;
-import org.shredzone.shariff.target.Flattr;
+import org.shredzone.shariff.target.Reddit;
 
 /**
  * Unit tests for {@link JSONTarget}.
@@ -34,7 +34,7 @@ public class JSONTargetTest {
 
     @Test(expected = IOException.class)
     public void badResponseTest() throws IOException {
-        Flattr target = new Flattr() {
+        Reddit target = new Reddit() {
             @Override
             protected HttpURLConnection connect(String url) throws IOException {
                 HttpURLConnection connection = mock(HttpURLConnection.class);
