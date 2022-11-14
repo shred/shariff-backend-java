@@ -46,7 +46,7 @@ public class FacebookTest {
         target = new Facebook() {
             @Override
             protected HttpURLConnection openConnection(URL url) throws IOException {
-                assertThat(url.toExternalForm(), is("https://graph.facebook.com/v14.0"
+                assertThat(url.toExternalForm(), is("https://graph.facebook.com/v15.0"
                             + "/?id=" + URLEncoder.encode(TEST_URL, UTF_8.name())
                             + "&fields=og_object%7Bengagement%7D"
                             + "&access_token=" + CLIENT_ID + "|" + CLIENT_SECRET));
