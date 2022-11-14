@@ -6,6 +6,12 @@ This document describes the Java backend. It is some kind of a port of the [offi
 
 This Shariff backend is not a part of the official backends by Heise Online!
 
+## DISCONTINUED
+
+Development on the [upstream Shariff project](https://github.com/heiseonline/shariff-backend-php) seems to have stopped (at the time of writing, the last commit was made in May 2022).
+
+Since I am also not using this Java backend anymore (or Shariff in general), I decided to discontinue working on this project. Version 1.24 is the final release.
+
 ## Features
 
 * Easy to use Java servlet
@@ -18,7 +24,7 @@ This Shariff backend is not a part of the official backends by Heise Online!
 
 ## Installing the Shariff backend on your own server
 
-Just add Shariff (`org.shredzone.shariff:backend:1.15`) to your maven or gradle dependencies, or copy the `shariff.jar`, [`json.jar`](https://mvnrepository.com/artifact/org.json/json) and [`slf4j`](https://www.slf4j.org/download.html) files to your project's lib folder. Add `org.shredzone.shariff` to your Java module dependencies. Then add the Shariff servlet to your `web.xml`:
+Just add Shariff (`org.shredzone.shariff:backend:1.24`) to your maven or gradle dependencies, or copy the `shariff.jar`, [`json.jar`](https://mvnrepository.com/artifact/org.json/json) and [`slf4j`](https://www.slf4j.org/download.html) files to your project's lib folder. Add `org.shredzone.shariff` to your Java module dependencies. Then add the Shariff servlet to your `web.xml`:
 
 ```xml
 <servlet>
