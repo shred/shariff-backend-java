@@ -8,7 +8,7 @@ This Shariff backend is not a part of the official backends by Heise Online!
 
 ## DISCONTINUED
 
-Development on the [upstream Shariff project](https://github.com/heiseonline/shariff-backend-php) seems to have stopped (at the time of writing, the last commit was made in May 2022).
+Development on the [upstream Shariff project](https://github.com/heiseonline/shariff-backend-php) seems to have stopped (at the time of writing, the last commit was made in May 2020).
 
 Since I am also not using this Java backend anymore (or Shariff in general), I decided to discontinue working on this project. Version 1.24 is the final release.
 
